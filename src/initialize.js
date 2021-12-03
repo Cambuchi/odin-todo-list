@@ -9,6 +9,10 @@ const initialize = () => {
     header.textContent = "To Do List"
     body.appendChild(header)
 
+    //create the content wrapper
+    const content = document.createElement('div');
+    content.id = 'content';
+
     //create the Projects section
     const projects = document.createElement('div');
     projects.id = 'projects';
@@ -26,12 +30,14 @@ const initialize = () => {
     projectsHeader.appendChild(projectsHeaderText);
     projects.appendChild(projectsHeader);
     projects.appendChild(projectsContent);
-    body.appendChild(projects);
+    content.appendChild(projects);
 
     //create the Tasks section
     const tasks = document.createElement('div')
     tasks.id = 'content';
-    body.appendChild(tasks);
+    content.appendChild(tasks);
+
+    body.appendChild(content);
 
     //create the footer
     const footer = document.createElement('div');

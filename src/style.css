@@ -8,6 +8,8 @@ html, body {
 
 body {
     background-color: #2f3437;
+    display: flex;
+    flex-direction: column;
 }
 
 #header {
@@ -22,11 +24,20 @@ body {
     flex-shrink: 0;
 }
 
+#content {
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
 #projects {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     background-color: #373c3f;
     color: #eaebeb;
+    width: 25vw;
+    align-self: stretch;
 }
 
 #projects-header {
@@ -38,9 +49,23 @@ body {
     flex-direction: column;
 }
 
-#content {
+#tasks {
     display: flex;
     flex-direction: column;
+}
+
+#footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    background: #565e63;
+    color: #eaebeb;
+    font-size: 1.15rem;
+    height: 4vh;
+    position: sticky;
+    top: 100vh;
+    flex-shrink: 0;
 }
 
 /* #nav {
