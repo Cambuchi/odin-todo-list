@@ -117,6 +117,7 @@ const ToDoListDOM = (() => {
     const addProjects = (data) => {
         //target projects content
         const content = document.getElementById('projects-content');
+        content.innerHTML = ''
 
         //create array of all Project items
         let projects = Object.keys(data);
@@ -136,4 +137,8 @@ const ToDoListDOM = (() => {
 })();
 
 ToDoListDOM.addProjects(data);
+
+window.data = data;
+window.ToDoList = ToDoList;
+window.ToDoListDOM = ToDoListDOM;
 

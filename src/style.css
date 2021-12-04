@@ -52,6 +52,13 @@ body {
 #tasks {
     display: flex;
     flex-direction: column;
+    color: #eaebeb;
+    align-self: stretch;
+}
+
+#tasks-header {
+    display: flex;
+    border-bottom: 1px solid #eaebeb
 }
 
 #footer {
