@@ -76,7 +76,7 @@ const initialize = () => {
     tasksEdit.appendChild(tasksEditText);
 
     const tasksContent = document.createElement('div');
-    tasksContent.id = 'projects-content';
+    tasksContent.id = 'tasks-content';
 
     const tasksAdd = document.createElement('div');
     tasksAdd.id = 'tasks-add';

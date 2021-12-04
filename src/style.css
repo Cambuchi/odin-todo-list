@@ -54,11 +54,45 @@ body {
     flex-direction: column;
     color: #eaebeb;
     align-self: stretch;
+    flex-grow: 1;
 }
 
 #tasks-header {
     display: flex;
     border-bottom: 1px solid #eaebeb
+}
+
+#tasks-header-wrapper {
+    flex-grow: 1;
+}
+
+#projects-add, #tasks-add, #tasks-edit {
+    display: flex;
+    border-radius: 5px;
+    width: 140px;
+    height:50px;
+    background-color: #444a4d;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
+}
+
+#projects-add, #tasks-add {
+    align-self: flex-end;
+}
+
+#tasks-edit {
+    align-self: center;
+}
+
+#projects-add-plus, #tasks-add-plus, #tasks-edit-pen {
+    align-self: center;
+    margin: 0px 10px 0 0;
+    color: #ff3f3f;
+}
+
+#projects-add-text, #tasks-add-text, #tasks-edit-text {
+    align-self: center;
 }
 
 #footer {

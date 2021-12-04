@@ -50,6 +50,8 @@ const data = {
     }
 }
 
+let currentProject = data['Project1 Name']
+
 const dates = [
     new Date(1995, 6, 2),
     new Date(1987, 1, 11),
@@ -113,8 +115,8 @@ const ToDoList = (() => {
 
 //module pattern encapsulating all of the DOM manipulation methods
 const ToDoListDOM = (() => {
-    //add object data to Project menu
-    const addProjects = (data) => {
+    //populate Project menu
+    const populateProjects = (data) => {
         //target projects content
         const content = document.getElementById('projects-content');
         content.innerHTML = ''
@@ -130,15 +132,27 @@ const ToDoListDOM = (() => {
         });
     };
 
+    //populate tasks based on current project
+    const populateTasks = (currentProject) => {
+        //target tasks content
+        const tasks = document.getElementById('tasks-content');
+        const title = document.getElementById('tasks-header-title');
+        const desc = document.getElementById('tasks-header-desc')
+
+        //
+    }
+
+
     return {
-        addProjects,
+        populateProjects,
     }
 
 })();
 
-ToDoListDOM.addProjects(data);
+ToDoListDOM.populateProjects(data);
 
 window.data = data;
+window.current = currentProject;
 window.ToDoList = ToDoList;
 window.ToDoListDOM = ToDoListDOM;
 
