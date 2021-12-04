@@ -95,6 +95,20 @@ body {
     align-self: center;
 }
 
+.task {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.task-main {
+    display: flex;
+}
+
+.task-title {
+    flex-grow: 1;
+}
+
 #footer {
     display: flex;
     align-items: center;

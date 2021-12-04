@@ -50,7 +50,7 @@ const data = {
     }
 }
 
-let currentProject = data['Project1 Name']
+let currentProject = 'Project1 Name'
 
 const dates = [
     new Date(1995, 6, 2),
@@ -67,6 +67,11 @@ const ToDoList = (() => {
     const addProject = (data, title, description) => {
         data[title] = {"description": description, "tasks": [] }
     };
+
+    //delete project
+    const deleteProject = (data, project) => {
+        delete data[project];
+    }
 
     //create a task item
     const createTask = (main, detail, priority, date, status, index) => {
@@ -133,23 +138,79 @@ const ToDoListDOM = (() => {
     };
 
     //populate tasks based on current project
-    const populateTasks = (currentProject) => {
+    const populateTasks = (data, currentProject) => {
         //target tasks content
         const tasks = document.getElementById('tasks-content');
         const title = document.getElementById('tasks-header-title');
         const desc = document.getElementById('tasks-header-desc')
 
-        //
+        //populate the header with project info
+        title.textContent = currentProject;
+        desc.textContent = data[currentProject]['description']
+
+        //populate task content with tasks from data
+        for (let i = 0; i < data[currentProject]['tasks'].length; i++) {
+            let taskData = data[currentProject]['tasks'][i];
+
+            //create DOM elements
+            let task = document.createElement('div');
+            task.classList.add('task', taskData.priority);
+            task.id = taskData.index;
+
+            let main = document.createElement('div');
+            main.className = 'task-main';
+
+            let checkbox = document.createElement('div');
+            checkbox.className = 'checkbox';
+
+            let taskTitle = document.createElement('div');
+            taskTitle.textContent = taskData.main;
+            taskTitle.classList.add('task-title', taskData.status);
+
+            let date = document.createElement('div');
+            date.textContent = taskData.date;
+            date.className = 'date';
+
+            let edit = document.createElement('div');
+            edit.textContent = '🖉';
+            edit.className = 'task-edit';
+
+            let trash = document.createElement('div');
+            trash.textContent = '🗑️';
+            trash.className = 'task-trash';
+
+            let sub = document.createElement('div');
+            sub.className = 'task-sub';
+
+            let taskDetail = document.createElement('div');
+            taskDetail.textContent = taskData.detail;
+            taskDetail.className = 'task-detail'
+
+            main.appendChild(checkbox);
+            main.appendChild(taskTitle);
+            main.appendChild(date);
+            main.appendChild(edit);
+            main.appendChild(trash);
+
+            sub.appendChild(taskDetail)
+
+            task.appendChild(main)
+            task.appendChild(sub)
+
+            tasks.appendChild(task)
+        }
     }
 
 
     return {
         populateProjects,
+        populateTasks,
     }
 
 })();
 
 ToDoListDOM.populateProjects(data);
+ToDoListDOM.populateTasks(data, currentProject)
 
 window.data = data;
 window.current = currentProject;
