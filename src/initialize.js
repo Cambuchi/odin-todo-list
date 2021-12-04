@@ -67,7 +67,7 @@ const initialize = () => {
     tasksEdit.id = 'tasks-edit';
     const tasksEditText = document.createElement('p');
     tasksEditText.id = 'tasks-edit-text';
-    tasksEditText.textContent = 'Edit';
+    tasksEditText.textContent = 'Edit Project';
     const tasksEditPen = document.createElement('span');
     tasksEditPen.id = 'tasks-edit-pen';
     tasksEditPen.textContent = '🖉';

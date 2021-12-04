@@ -22,6 +22,7 @@ body {
     font-size: 4rem;
     height: 10vh;
     flex-shrink: 0;
+    padding: 0 30px;
 }
 
 #content {
@@ -36,17 +37,27 @@ body {
     flex-direction: column;
     background-color: #373c3f;
     color: #eaebeb;
-    width: 25vw;
+    width: 35vw;
     align-self: stretch;
+    padding: 0 30px;
 }
 
 #projects-header {
-    border-bottom: 1px solid #eaebeb
+    border-bottom: 1px solid hsla(0,0%,100%,.4)
 }
 
 #projects-content {
     display: flex;
     flex-direction: column;
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+.project-item {
+    margin: 15px 0 0 0;
+    border: 1px solid hsla(0,0%,100%,.4);
+    border-radius: 10px;
+    padding: 20px 20px;
 }
 
 #tasks {
@@ -55,15 +66,24 @@ body {
     color: #eaebeb;
     align-self: stretch;
     flex-grow: 1;
+    margin: 0 30px;
 }
 
 #tasks-header {
     display: flex;
-    border-bottom: 1px solid #eaebeb
+    border-bottom: 1px solid hsla(0,0%,100%,.4);
 }
 
 #tasks-header-wrapper {
     flex-grow: 1;
+}
+
+#tasks-header-title {
+    margin: 25px 0 0 0;
+}
+
+#tasks-header-desc {
+    margin: 25px 0;
 }
 
 #projects-add, #tasks-add, #tasks-edit {
@@ -74,7 +94,7 @@ body {
     background-color: #444a4d;
     justify-content: center;
     align-items: center;
-    margin: 15px;
+    margin: 0px;
 }
 
 #projects-add, #tasks-add {
@@ -98,15 +118,46 @@ body {
 .task {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    margin: 15px 0;
+    border: 1px solid hsla(0,0%,100%,.4);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.25rem;
+}
+
+.checkbox {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid hsla(0,0%,100%,.4);
+    cursor: pointer;
+}
+
+.checkbox-space {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0);
 }
 
 .task-main {
     display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.task-sub {
+    display: none;
+    margin: 0 0 15px 0;
 }
 
 .task-title {
+    display: flex;
     flex-grow: 1;
+}
+
+.task-title, .task-date, .task-edit, .task-trash, .task-detail {
+    margin: 0 0 0 15px;
 }
 
 #footer {

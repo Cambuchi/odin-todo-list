@@ -169,22 +169,28 @@ const ToDoListDOM = (() => {
 
             let date = document.createElement('div');
             date.textContent = taskData.date;
-            date.className = 'date';
+            date.className = 'task-date';
 
             let edit = document.createElement('div');
             edit.textContent = '🖉';
             edit.className = 'task-edit';
 
             let trash = document.createElement('div');
-            trash.textContent = '🗑️';
+            trash.textContent = 'X';
             trash.className = 'task-trash';
 
             let sub = document.createElement('div');
             sub.className = 'task-sub';
 
+            let checkboxSpace = document.createElement('div');
+            checkboxSpace.className = 'checkbox-space';
+
             let taskDetail = document.createElement('div');
             taskDetail.textContent = taskData.detail;
             taskDetail.className = 'task-detail'
+
+            sub.appendChild(checkboxSpace)
+            sub.appendChild(taskDetail)
 
             main.appendChild(checkbox);
             main.appendChild(taskTitle);
@@ -192,15 +198,12 @@ const ToDoListDOM = (() => {
             main.appendChild(edit);
             main.appendChild(trash);
 
-            sub.appendChild(taskDetail)
-
             task.appendChild(main)
             task.appendChild(sub)
 
             tasks.appendChild(task)
         }
     }
-
 
     return {
         populateProjects,
