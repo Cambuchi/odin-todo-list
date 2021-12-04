@@ -1,6 +1,7 @@
 import { format, compareAsc } from 'date-fns'
 import './style.css';
 import './modern-normalize.css';
+import TrashIcon from './assets/trash.png'
 import {initialize} from './initialize';
 
 initialize();
@@ -62,7 +63,7 @@ dates.sort(compareAsc);
 console.log(dates)
 
 //module pattern containing all of the todo list logic
-const ToDoList = (() => {
+const ToDoListLogic = (() => {
     //adds a project item into data
     const addProject = (data, title, description) => {
         data[title] = {"description": description, "tasks": [] }
@@ -110,6 +111,7 @@ const ToDoList = (() => {
 
     return {
         addProject,
+        deleteProject,
         createTask,
         addTask,
         deleteTask,
@@ -133,6 +135,13 @@ const ToDoListDOM = (() => {
             let project = document.createElement('div')
             project.classList = 'project-item'
             project.textContent = item
+
+            let trash = new Image();
+            trash.src = TrashIcon
+            trash.className = 'task-trash';
+
+            project.appendChild(trash)
+
             content.appendChild(project);
         });
     };
@@ -175,8 +184,8 @@ const ToDoListDOM = (() => {
             edit.textContent = '🖉';
             edit.className = 'task-edit';
 
-            let trash = document.createElement('div');
-            trash.textContent = 'X';
+            let trash = new Image();
+            trash.src = TrashIcon
             trash.className = 'task-trash';
 
             let sub = document.createElement('div');
@@ -212,11 +221,13 @@ const ToDoListDOM = (() => {
 
 })();
 
+
+
 ToDoListDOM.populateProjects(data);
 ToDoListDOM.populateTasks(data, currentProject)
 
 window.data = data;
 window.current = currentProject;
-window.ToDoList = ToDoList;
+window.ToDoListLogic = ToDoListLogic;
 window.ToDoListDOM = ToDoListDOM;
 

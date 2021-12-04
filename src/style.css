@@ -40,6 +40,8 @@ body {
     width: 35vw;
     align-self: stretch;
     padding: 0 30px;
+    max-width: 500px;
+    min-width: fit-content;
 }
 
 #projects-header {
@@ -54,6 +56,9 @@ body {
 }
 
 .project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin: 15px 0 0 0;
     border: 1px solid hsla(0,0%,100%,.4);
     border-radius: 10px;
@@ -154,6 +159,14 @@ body {
 .task-title {
     display: flex;
     flex-grow: 1;
+}
+
+.task-edit {
+    color: #ff3f3f;
+}
+
+.task-trash {
+    width: 25px;
 }
 
 .task-title, .task-date, .task-edit, .task-trash, .task-detail {
