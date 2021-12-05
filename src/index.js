@@ -129,18 +129,20 @@ const ToDoListDOM = (() => {
         content.innerHTML = ''
 
         //create array of all Project items
+        let counter = 0;
         let projects = Object.keys(data);
         projects.forEach(function (item) {
-            console.log(item)
             let project = document.createElement('div')
             project.classList = 'project-item'
+            project.id = `p${counter}`;
+            counter++
             project.textContent = item
 
             let trash = new Image();
             trash.src = TrashIcon
             trash.className = 'task-trash';
 
-            project.appendChild(trash)
+            project.appendChild(trash);
 
             content.appendChild(project);
         });
@@ -221,6 +223,13 @@ const ToDoListDOM = (() => {
 
 })();
 
+//module pattern for coordinating DOM and logic
+const ToDoList = (() => {
+    //on clicking a project, loads up the tasks into the DOM
+    let projectList = document.getElementsByClassName('project-item')
+    
+
+})();
 
 
 ToDoListDOM.populateProjects(data);

@@ -107,6 +107,67 @@ const initialize = () => {
     footer.id = 'footer';
     footer.textContent = "Copyright 2021 Cam Nguyen"
     body.appendChild(footer);
+
+    //create the modal for adding projects
+    const modal = document.createElement('div');
+    modal.id = 'modal';
+
+    const modalContent = document.createElement('div')
+    modalContent.id = 'modal-content';
+
+    const modalForm = document.createElement('form');
+    modalForm.id = 'modal-form';
+    modalForm.onsubmit = 'return false';
+
+    const modalTitleHead = document.createElement('label');
+    modalTitleHead.className = 'modal-label'
+    modalTitleHead.for = 'modal-title'
+    modalTitleHead.textContent = "Project Name:";
+
+    const modalTitleInput = document.createElement('input');
+    modalTitleInput.type = 'text';
+    modalTitleInput.id = 'modal-title';
+    modalTitleInput.placeholder = 'Name of Project/Tasks';
+
+    const modalDescHead = document.createElement('label');
+    modalDescHead.className = 'modal-label'
+    modalDescHead.for = 'modal-desc'
+    modalDescHead.textContent = "Project Description:";
+
+    const modalDescInput = document.createElement('input');
+    modalDescInput.type = 'text';
+    modalDescInput.id = 'modal-desc';
+    modalDescInput.placeholder = 'Description of Project/Tasks';
+
+    const modalButtons = document.createElement('div');
+    modalButtons.id = 'modal-buttons-container';
+
+    const modalSubmit = document.createElement('button');
+    modalSubmit.id = 'modal-submit';
+    modalSubmit.className = 'btn-submit';
+    modalSubmit.textContent = 'Submit';
+    modalSubmit.type = 'button';
+
+    const modalCancel = document.createElement('button');
+    modalCancel.id = 'modal-cancel';
+    modalCancel.className = 'btn-cancel';
+    modalCancel.textContent = 'Cancel';
+    modalCancel.type = 'button';
+
+    modalButtons.appendChild(modalSubmit);
+    modalButtons.appendChild(modalCancel);
+
+    modalForm.appendChild(modalTitleHead);
+    modalForm.appendChild(modalTitleInput);
+    modalForm.appendChild(modalDescHead);
+    modalForm.appendChild(modalDescInput);
+    modalForm.appendChild(modalButtons);
+
+    modalContent.appendChild(modalForm);
+    modal.appendChild(modalContent);
+
+    body.appendChild(modal);
+
 }
 
 export {
