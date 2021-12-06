@@ -148,25 +148,13 @@ const ToDoListDOM = (() => {
         //target projects content
         const content = document.getElementById('projects-content');
         content.innerHTML = ''
-
         //create array of all Project items
         let projects = Object.keys(data);
+        //add each item into project sidebar
         projects.forEach(function (item) {
-            let project = document.createElement('div')
-            project.classList = 'project-item'
-
-            let projectText = document.createElement('span')
-            projectText.classList = 'project-item-text'
-            projectText.textContent = item
-
-            let trash = new Image();
-            trash.src = TrashIcon
-            trash.className = 'project-trash';
-
-            project.appendChild(projectText);
-            project.appendChild(trash);
-
-            content.appendChild(project);
+            addProjectContent(item);
+            addProjectNameClick(item);
+            addProjectTrashClick(item);
         });
     };
 
@@ -251,38 +239,45 @@ const ToDoListDOM = (() => {
         return current
     }
 
+    //remove an element based on text search and selector query
     const removeActiveElement = (searchTerm, selector) => {
         const current = Array.from(document.querySelectorAll(selector))
                              .find(el => el.textContent.includes(searchTerm));
         current.remove()
     }
 
-    const addProject = (title) => {
+    //adds a single project into the sidebar based on title input
+    const addProjectContent = (title) => {
+        //target project content element
         const content = document.getElementById('projects-content');
+        //create project item
         let project = document.createElement('div')
         project.classList = 'project-item'
-        
+        //create project name
         let projectText = document.createElement('span')
         projectText.classList = 'project-item-text'
         projectText.textContent = title
-
+        //create project trash icon
         let trash = new Image();
         trash.src = TrashIcon
         trash.className = 'project-trash';
-
+        //add project item into project content
         project.appendChild(projectText);
         project.appendChild(trash);
-
         content.appendChild(project);
     }
 
     //changes active project to be highlighted in panel
     const changeActiveProject = (currentTitle) => {
+        //if blank title is passed in, don't highlight any project
         if (currentTitle == '') {
             return
         }
+        //get element that we want to target
         const current = findActiveElement(currentTitle, '.project-item')
+        //adds the correct style class
         current.classList.add('project-active');
+        //remove style class for all siblings of that element
         for (let sibling of current.parentNode.children) {
             if (sibling !== current) {
                 sibling.classList.remove('project-active')
@@ -290,67 +285,75 @@ const ToDoListDOM = (() => {
         }
     }
 
+    //shows the edit project button in the tasks area header
     const showProjectEditButton = () => {
         const tasksHeaderEditButton = document.getElementById('tasks-edit');
         tasksHeaderEditButton.style.display = 'flex';
     }
 
-    //create click events on all projects in panel for project selection
-    const createProjectClick = () => {
-        let projects = Array.from(document.querySelectorAll('.project-item-text'));
-        projects.forEach(btn => btn.addEventListener('click', function() {
-            const title = btn.textContent;
-            ToDoList.updateProjectDOM(title);
-        }));
+    //when a projects name is clicked, switches to that project's tasks & highlights as active
+    const addProjectNameClick = (title) => {
+        const current = findActiveElement(title, '.project-item-text');
+        current.onclick = function() {
+            populateTasks(data, title);
+            changeActiveProject(title);
+        }
     }
 
-    //create click events on trash icons in project panel
-    const createProjectTrash = () => {
-        let trash = Array.from(document.querySelectorAll('.project-trash'));
-        trash.forEach(btn => btn.onclick = function() {
-            const title = btn.parentNode.textContent;
+    //when project trash icon is clicked, delete that project from DOM & memory
+    const addProjectTrashClick = (title) => {
+        const currentText = findActiveElement(title, '.project-item-text');
+        const currentTrash = currentText.nextElementSibling
+        currentTrash.onclick = function() {
+            const title = currentTrash.parentNode.textContent;
             ToDoList.deleteProject(title)
-        });
+        }
     }
 
-    //DOM function to run when no projects are selected or current projected is deleted
+    //when no projects are selected or current projected is deleted, special DOM display
     const blankProject = () => {
+        //display info telling user that there is no project selected
         let taskTitle = document.getElementById('tasks-header-title')
         let taskDesc = document.getElementById('tasks-header-desc')
         let taskContent = document.getElementById('tasks-content')
-        const tasksHeaderEditButton = document.getElementById('tasks-edit')
         taskTitle.textContent = 'Select/Add a Project';
         taskDesc.textContent = 'No project is currently selected.'
         taskContent.innerHTML = ''
+        //hide edit button since there is no project selected
+        const tasksHeaderEditButton = document.getElementById('tasks-edit')
         tasksHeaderEditButton.style.display = 'none'
     }
 
     return {
         populateProjects,
         populateTasks,
-        addProject,
+        addProjectContent,
+        addProjectNameClick,
+        addProjectTrashClick,
         changeActiveProject,
-        createProjectClick,
-        createProjectTrash,
         blankProject,
         showProjectEditButton,
         findActiveElement,
         removeActiveElement,
+
     }
 
 })();
 
 //module pattern for coordinating DOM and logic
 const ToDoList = (() => {
-    //event sequence upon submitting a new project
+    //event sequence upon submitting a new project from modal
     const submitProject = () => {
         //target form values
         const title = document.getElementById('modal-title').value;
         const desc = document.getElementById('modal-desc').value;
         //add values to data array
         ToDoListLogic.addProject(data, title, desc);
-        ToDoListDOM.addProject(title);
-        //change DOM to newly made project
+        //add DOM elements needed for new project
+        ToDoListDOM.addProjectContent(title);
+        ToDoListDOM.addProjectNameClick(title);
+        ToDoListDOM.addProjectTrashClick(title);
+        //Update DOM elements
         updateProjectDOM(title);
     }
 
@@ -362,13 +365,16 @@ const ToDoList = (() => {
         let currentTitle = document.getElementById('tasks-header-title');
         let currentDesc = document.getElementById('tasks-header-desc');
         //edit the values in the data object
-        let valid = ToDoListLogic.editProject(data, inputTitle.value, currentTitle.textContent, inputDesc.value, currentDesc.textContent)
+        let duplicate = ToDoListLogic.editProject(data, inputTitle.value, currentTitle.textContent, 
+                                                  inputDesc.value, currentDesc.textContent)
         //if invalid new key (duplicate/etc) don't change DOM, else replace DOM with new values
-        if (valid) {
+        if (duplicate) {
             return
-        } else if (!valid) {
+        } else if (!duplicate) {
+            //change active element to new title
             const currentProject = ToDoListDOM.findActiveElement(currentTitle.textContent, ".project-item-text")
             currentProject.textContent = inputTitle.value;
+            //change header above tasks to new project edit info
             currentTitle.textContent = inputTitle.value;
             currentDesc.textContent = inputDesc.value;
             
@@ -377,6 +383,7 @@ const ToDoList = (() => {
 
     //event sequence when you delete a project
     const deleteProject = (title) => {
+        //delete project from memory
         ToDoListLogic.deleteProject(data, title);
         //remove project from project list
         ToDoListDOM.removeActiveElement(title, ".project-item")
@@ -391,11 +398,8 @@ const ToDoList = (() => {
 
     //event sequence to update projects and tasks DOM and styling for active project
     const updateProjectDOM = (title) => {
-        // ToDoListDOM.populateProjects(data);
         ToDoListDOM.populateTasks(data, title);
         ToDoListDOM.changeActiveProject(title);
-        ToDoListDOM.createProjectClick();
-        ToDoListDOM.createProjectTrash();
         //on empty projects, insert defaults and remove edit button
         if (title === '') {
             console.log('blank fire');
@@ -418,7 +422,6 @@ const ToDoList = (() => {
 (() => {
     ToDoListDOM.populateProjects(data);
     ToDoList.updateProjectDOM(currentProject);
-    ToDoListDOM.createProjectTrash();
 
     //add a project via the form submit button
     const addProjectForm = document.getElementById('modal-form')
@@ -452,7 +455,18 @@ const ToDoList = (() => {
     const tasksHeaderTitle = document.getElementById('tasks-header-wrapper')
     const tasksHeaderEditButton = document.getElementById('tasks-edit')
     const tasksHeaderCancelButton = document.getElementById('tasks-form-cancel')
-    const tasksHeaderSubmitButton = document.getElementById('tasks-form-submit')
+
+    function showProjectEdit() {
+        editProjectForm.style.display = 'flex'
+        tasksHeaderTitle.style.display = 'none'
+        tasksHeaderEditButton.style.display = 'none'
+    }
+
+    function hideProjectEdit() {
+        editProjectForm.style.display = 'none'
+        tasksHeaderTitle.style.display = 'flex'
+        tasksHeaderEditButton.style.display = 'flex'
+    }
 
     //when edit button is clicked, change styles to reveal the edit form
     tasksHeaderEditButton.onclick = function() {
@@ -462,27 +476,21 @@ const ToDoList = (() => {
         let currentDesc = document.getElementById('tasks-header-desc').textContent;
         inputTitle.value = currentTitle;
         inputDesc.value = currentDesc;
-        editProjectForm.style.display = 'flex'
-        tasksHeaderTitle.style.display = 'none'
-        tasksHeaderEditButton.style.display = 'none'
+        showProjectEdit()
     }
 
     //when edit cancel button is clicked, hide form and reset header
     tasksHeaderCancelButton.onclick = function() {
-        editProjectForm.style.display = 'none'
-        tasksHeaderTitle.style.display = 'flex'
-        tasksHeaderEditButton.style.display = 'flex'
+        hideProjectEdit()
     }
 
     //when edit project form is submitted
-    editProjectForm.onsubmit = editProject;
+    editProjectForm.onsubmit = editProjectSubmit;
     
-    function editProject(event) {
+    function editProjectSubmit(event) {
         ToDoList.editProject();
         event.preventDefault();
-        editProjectForm.style.display = 'none'
-        tasksHeaderTitle.style.display = 'flex'
-        tasksHeaderEditButton.style.display = 'flex'
+        hideProjectEdit()
     }
 
 })();
