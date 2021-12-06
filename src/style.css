@@ -290,6 +290,7 @@ body {
 
 #modal {
     display: none;
+    font-family: 'Aileron-Light';
     position: fixed;
     justify-content: center;
     align-items: center;
