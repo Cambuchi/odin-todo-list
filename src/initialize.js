@@ -29,6 +29,7 @@ const initialize = () => {
 
     const projectsAdd = document.createElement('div');
     projectsAdd.id = 'projects-add'
+    projectsAdd.classList = 'btn'
     const projectsAddText = document.createElement('p');
     projectsAddText.id = 'projects-add-text'
     projectsAddText.textContent = 'Add Project';
@@ -65,6 +66,7 @@ const initialize = () => {
 
     const tasksEdit = document.createElement('div');
     tasksEdit.id = 'tasks-edit';
+    tasksEdit.classList = 'btn'
     const tasksEditText = document.createElement('p');
     tasksEditText.id = 'tasks-edit-text';
     tasksEditText.textContent = 'Edit Project';
@@ -80,6 +82,7 @@ const initialize = () => {
 
     const tasksAdd = document.createElement('div');
     tasksAdd.id = 'tasks-add';
+    tasksAdd.classList = 'btn'
     const tasksAddText = document.createElement('p');
     tasksAddText.id = 'tasks-add-text';
     tasksAddText.textContent = 'Add Task';
@@ -127,6 +130,7 @@ const initialize = () => {
     const modalTitleInput = document.createElement('input');
     modalTitleInput.type = 'text';
     modalTitleInput.id = 'modal-title';
+    modalTitleInput.required = true;
     modalTitleInput.placeholder = 'Name of Project/Tasks';
 
     const modalDescHead = document.createElement('label');
@@ -146,7 +150,7 @@ const initialize = () => {
     modalSubmit.id = 'modal-submit';
     modalSubmit.className = 'btn-submit';
     modalSubmit.textContent = 'Submit';
-    modalSubmit.type = 'button';
+    modalSubmit.type = 'submit';
 
     const modalCancel = document.createElement('button');
     modalCancel.id = 'modal-cancel';

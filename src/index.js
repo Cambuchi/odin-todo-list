@@ -46,6 +46,14 @@ const data = {
                 "date": "12/6/2021",
                 "status": "incomplete",
                 "index": 1,
+            },
+            {
+                "main": "test JSON3",
+                "detail": "format design",
+                "priority": "medium",
+                "date": "12/6/2021",
+                "status": "complete",
+                "index": 2,
             }
         ]
     }
@@ -62,7 +70,7 @@ const dates = [
 dates.sort(compareAsc);
 console.log(dates)
 
-//module pattern containing all of the todo list logic
+//module pattern containing all of the todo list data logic
 const ToDoListLogic = (() => {
     //adds a project item into data
     const addProject = (data, title, description) => {
@@ -136,12 +144,15 @@ const ToDoListDOM = (() => {
             project.classList = 'project-item'
             project.id = `p${counter}`;
             counter++
-            project.textContent = item
+            let projectText = document.createElement('span')
+            projectText.classList = 'project-item-text'
+            projectText.textContent = item
 
             let trash = new Image();
             trash.src = TrashIcon
-            trash.className = 'task-trash';
+            trash.className = 'project-trash';
 
+            project.appendChild(projectText);
             project.appendChild(trash);
 
             content.appendChild(project);
@@ -150,10 +161,17 @@ const ToDoListDOM = (() => {
 
     //populate tasks based on current project
     const populateTasks = (data, currentProject) => {
+        if (currentProject == '') {
+            blankProject();
+            return
+        }
         //target tasks content
         const tasks = document.getElementById('tasks-content');
         const title = document.getElementById('tasks-header-title');
         const desc = document.getElementById('tasks-header-desc')
+
+        //empty tasks content
+        tasks.innerHTML = '';
 
         //populate the header with project info
         title.textContent = currentProject;
@@ -216,24 +234,127 @@ const ToDoListDOM = (() => {
         }
     }
 
+    //changes active project to be highlighted in panel
+    const changeActiveProject = (currentTitle) => {
+        if (currentTitle == '') {
+            return
+        }
+        const current = Array.from(document.querySelectorAll('.project-item'))
+                             .find(el => el.textContent.includes(currentTitle));
+        current.classList.add('project-active');
+    }
+
+    //create click events on all projects in panel for project selection
+    const createProjectClick = () => {
+        let projects = Array.from(document.querySelectorAll('.project-item-text'));
+        projects.forEach(btn => btn.addEventListener('click', function() {
+            const title = btn.textContent;
+            ToDoList.updateProjectDOM(title);
+        }));
+    }
+
+    //create click events on trash icons in project panel
+    const createProjectTrash = () => {
+        let trash = Array.from(document.querySelectorAll('.project-trash'));
+        trash.forEach(btn => btn.addEventListener('click', function() {
+            const title = btn.parentNode.textContent;
+            ToDoList.deleteProject(title)
+        }));
+    }
+
+    //DOM function to run when no projects are selected or current projected is deleted
+    const blankProject = () => {
+        let taskTitle = document.getElementById('tasks-header-title')
+        let taskDesc = document.getElementById('tasks-header-desc')
+        let taskContent = document.getElementById('tasks-content')
+        taskTitle.textContent = 'Select/Add a Project';
+        taskDesc.textContent = 'No project is currently selected.'
+        taskContent.innerHTML = ''
+    }
+
+
     return {
         populateProjects,
         populateTasks,
+        changeActiveProject,
+        createProjectClick,
+        createProjectTrash,
+        blankProject,
     }
 
 })();
 
 //module pattern for coordinating DOM and logic
 const ToDoList = (() => {
-    //on clicking a project, loads up the tasks into the DOM
-    let projectList = document.getElementsByClassName('project-item')
-    
+    //event sequence upon submitting a new project
+    const submitProject = () => {
+        //target form values
+        const title = document.getElementById('modal-title').value;
+        const desc = document.getElementById('modal-desc').value;
+        //add values to data array
+        ToDoListLogic.addProject(data, title, desc);
+        //change DOM to newly made project
+        updateProjectDOM(title);
+    }
+
+    //event sequence when you delete a project
+    const deleteProject = (title) => {
+        ToDoListLogic.deleteProject(data, title);
+        updateProjectDOM('');
+    }
+
+    //event sequence to update projects and tasks DOM and styling for active project
+    const updateProjectDOM = (title) => {
+        ToDoListDOM.populateProjects(data);
+        ToDoListDOM.populateTasks(data, title);
+        ToDoListDOM.changeActiveProject(title);
+        ToDoListDOM.createProjectClick();
+        ToDoListDOM.createProjectTrash();
+    }
+
+
+    return {
+        submitProject,
+        deleteProject,
+        updateProjectDOM,
+    }
+
 
 })();
 
+//IIFE to initialize non-recreated event handlers
+(() => {
+    ToDoList.updateProjectDOM(currentProject);
+    ToDoListDOM.createProjectTrash();
 
-ToDoListDOM.populateProjects(data);
-ToDoListDOM.populateTasks(data, currentProject)
+    //add a project via the form submit button
+    const addProject = document.getElementById('modal-form')
+    const modal = document.getElementById('modal')
+    const addProjectBtn = document.getElementById('projects-add')
+    const cancelProjectBtn = document.getElementById('modal-cancel')
+
+    //display modal form when project add button is clicked 
+    addProjectBtn.onclick = function() {
+        modal.style.display = 'flex'
+    }
+
+    //remove modal when cancel is clicked
+    cancelProjectBtn.onclick = function() {
+        addProject.reset();
+        modal.style.display = 'none';
+    }
+
+    //when project submit button is clicked, add project, reset form, remove modal
+    addProject.onsubmit = submit;
+
+    function submit(event) {
+        ToDoList.submitProject();
+        addProject.reset();
+        event.preventDefault();
+        modal.style.display = 'none';
+    }
+
+})();
 
 window.data = data;
 window.current = currentProject;

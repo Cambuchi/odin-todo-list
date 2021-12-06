@@ -60,9 +60,13 @@ body {
     justify-content: space-between;
     align-items: center;
     margin: 15px 0 0 0;
-    border: 1px solid hsla(0, 0%, 100%, .4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 20px 20px;
+}
+
+.project-item-text {
+    cursor: pointer;
 }
 
 #tasks {
@@ -95,8 +99,7 @@ body {
     display: flex;
     border-radius: 5px;
     width: 140px;
-    height: 50px;
-    background-color: #444a4d;
+    min-height: 50px;
     justify-content: center;
     align-items: center;
     margin: 0px;
@@ -104,6 +107,10 @@ body {
 
 #projects-add, #tasks-add {
     align-self: flex-end;
+}
+
+#tasks-content {
+    margin-bottom: 15px;
 }
 
 #tasks-edit {
@@ -123,7 +130,7 @@ body {
 .task {
     display: flex;
     flex-direction: column;
-    margin: 15px 0;
+    margin: 15px 0 0 0;
     border: 1px solid hsla(0, 0%, 100%, .4);
     border-radius: 10px;
     padding: 10px 20px;
@@ -136,6 +143,14 @@ body {
     border-radius: 50%;
     border: 1px solid hsla(0, 0%, 100%, .4);
     cursor: pointer;
+}
+
+.checked {
+    background-color: #7af76e;
+    background-image: url(./assets/checkmark.svg);
+    background-position: 50% 50%;
+    background-size: 15px;
+    background-repeat: no-repeat;
 }
 
 .checkbox-space {
@@ -165,12 +180,22 @@ body {
     color: #ff3f3f;
 }
 
-.task-trash {
+.task-trash, .project-trash {
     width: 25px;
+    cursor: pointer;
 }
 
 .task-title, .task-date, .task-edit, .task-trash, .task-detail {
     margin: 0 0 0 15px;
+}
+
+.btn {
+    cursor: pointer;
+    background-color: #444a4d;
+}
+
+.btn:hover {
+    background-color: #6c7479;
 }
 
 #footer {
@@ -188,7 +213,7 @@ body {
 }
 
 #modal {
-    display: flex;
+    display: none;
     position: fixed;
     justify-content: center;
     align-items: center;
@@ -280,6 +305,9 @@ body {
     background-color: #ff3f3f;
 }
 
+.project-active {
+    background-color: #565e63;
+}
 
 /* #nav {
     display: flex;
