@@ -85,14 +85,53 @@ body {
 
 #tasks-header-wrapper {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#tasks-form {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+}
+
+#tasks-form-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 #tasks-header-title {
     margin: 25px 0 0 0;
+    font-size: 1.5rem;
 }
 
 #tasks-header-desc {
     margin: 25px 0;
+    font-size: 1.25rem;
+}
+
+#tasks-form-title, #tasks-form-desc {
+    background-color: #444a4d;
+    border: none;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+#tasks-form-title {
+    font-size: 1.5rem;
+    margin: 10px 0 0 0;
+}
+
+#tasks-form-desc {
+    font-size: 1.25rem;
+    margin: 10px 0;
+}
+
+.form-btn {
+    margin-left: 15px;
 }
 
 #projects-add, #tasks-add, #tasks-edit {

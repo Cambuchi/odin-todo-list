@@ -61,15 +61,6 @@ const data = {
 
 let currentProject = 'Project1 Name'
 
-const dates = [
-    new Date(1995, 6, 2),
-    new Date(1987, 1, 11),
-    new Date(1989, 6, 10),
-]
-
-dates.sort(compareAsc);
-console.log(dates)
-
 //module pattern containing all of the todo list data logic
 const ToDoListLogic = (() => {
     //adds a project item into data
@@ -80,6 +71,26 @@ const ToDoListLogic = (() => {
     //delete project
     const deleteProject = (data, project) => {
         delete data[project];
+    }
+
+    //edit project title and name with provided new values
+    const editProject = (data, newKey, oldKey, newDesc, oldDesc) => {
+        //exit if provided values match
+        if (oldKey == newKey && newDesc == oldDesc) {
+            return;
+        //if only the description is different, update value in data
+        } else if (oldKey == newKey && newDesc != oldDesc) {
+            data[oldKey]['description'] = newDesc;
+        //if key if different, change project key and description
+        } else if (oldKey !== newKey && data[oldKey] && !data[newKey]) {
+            Object.defineProperty(data, newKey,
+                Object.getOwnPropertyDescriptor(data, oldKey));
+            data[newKey]['description'] = newDesc
+            delete data[oldKey];
+        }
+        //if key is different but currently exists in data, do nothing & console log reason
+        console.log('New Project Title already exists in data. Cannot have duplicate projects.')
+        return
     }
 
     //create a task item
@@ -120,6 +131,7 @@ const ToDoListLogic = (() => {
     return {
         addProject,
         deleteProject,
+        editProject,
         createTask,
         addTask,
         deleteTask,
@@ -162,7 +174,6 @@ const ToDoListDOM = (() => {
     //populate tasks based on current project
     const populateTasks = (data, currentProject) => {
         if (currentProject == '') {
-            blankProject();
             return
         }
         //target tasks content
@@ -244,6 +255,11 @@ const ToDoListDOM = (() => {
         current.classList.add('project-active');
     }
 
+    const showProjectEditButton = () => {
+        const tasksHeaderEditButton = document.getElementById('tasks-edit');
+        tasksHeaderEditButton.style.display = 'flex';
+    }
+
     //create click events on all projects in panel for project selection
     const createProjectClick = () => {
         let projects = Array.from(document.querySelectorAll('.project-item-text'));
@@ -256,10 +272,10 @@ const ToDoListDOM = (() => {
     //create click events on trash icons in project panel
     const createProjectTrash = () => {
         let trash = Array.from(document.querySelectorAll('.project-trash'));
-        trash.forEach(btn => btn.addEventListener('click', function() {
+        trash.forEach(btn => btn.onclick = function() {
             const title = btn.parentNode.textContent;
             ToDoList.deleteProject(title)
-        }));
+        });
     }
 
     //DOM function to run when no projects are selected or current projected is deleted
@@ -267,11 +283,12 @@ const ToDoListDOM = (() => {
         let taskTitle = document.getElementById('tasks-header-title')
         let taskDesc = document.getElementById('tasks-header-desc')
         let taskContent = document.getElementById('tasks-content')
+        const tasksHeaderEditButton = document.getElementById('tasks-edit')
         taskTitle.textContent = 'Select/Add a Project';
         taskDesc.textContent = 'No project is currently selected.'
         taskContent.innerHTML = ''
+        tasksHeaderEditButton.style.display = 'none'
     }
-
 
     return {
         populateProjects,
@@ -280,6 +297,7 @@ const ToDoListDOM = (() => {
         createProjectClick,
         createProjectTrash,
         blankProject,
+        showProjectEditButton,
     }
 
 })();
@@ -300,7 +318,12 @@ const ToDoList = (() => {
     //event sequence when you delete a project
     const deleteProject = (title) => {
         ToDoListLogic.deleteProject(data, title);
-        updateProjectDOM('');
+        let current = document.getElementById('tasks-header-title').textContent;
+        if (title === current || current === 'Select/Add a Project') {
+            updateProjectDOM('');
+        } else {
+            updateProjectDOM(current)
+        }
     }
 
     //event sequence to update projects and tasks DOM and styling for active project
@@ -310,16 +333,20 @@ const ToDoList = (() => {
         ToDoListDOM.changeActiveProject(title);
         ToDoListDOM.createProjectClick();
         ToDoListDOM.createProjectTrash();
+        if (title === '') {
+            console.log('blank fire')
+            ToDoListDOM.blankProject()
+        } else {
+            ToDoListDOM.showProjectEditButton();
+        }
     }
-
 
     return {
         submitProject,
         deleteProject,
         updateProjectDOM,
     }
-
-
+ 
 })();
 
 //IIFE to initialize non-recreated event handlers
@@ -328,7 +355,7 @@ const ToDoList = (() => {
     ToDoListDOM.createProjectTrash();
 
     //add a project via the form submit button
-    const addProject = document.getElementById('modal-form')
+    const addProjectForm = document.getElementById('modal-form')
     const modal = document.getElementById('modal')
     const addProjectBtn = document.getElementById('projects-add')
     const cancelProjectBtn = document.getElementById('modal-cancel')
@@ -340,18 +367,45 @@ const ToDoList = (() => {
 
     //remove modal when cancel is clicked
     cancelProjectBtn.onclick = function() {
-        addProject.reset();
+        addProjectForm.reset();
         modal.style.display = 'none';
     }
 
     //when project submit button is clicked, add project, reset form, remove modal
-    addProject.onsubmit = submit;
+    addProjectForm.onsubmit = submit;
 
     function submit(event) {
         ToDoList.submitProject();
-        addProject.reset();
+        addProjectForm.reset();
         event.preventDefault();
         modal.style.display = 'none';
+    }
+
+    //add a project via the form submit button
+    const editProjectForm = document.getElementById('tasks-form');
+    const tasksHeaderTitle = document.getElementById('tasks-header-wrapper')
+    const tasksHeaderEditButton = document.getElementById('tasks-edit')
+    const tasksHeaderCancelButton = document.getElementById('tasks-form-cancel')
+    const tasksHeaderSubmitButton = document.getElementById('tasks-form-submit')
+
+    //when edit button is clicked, change styles to reveal the edit form
+    tasksHeaderEditButton.onclick = function() {
+        let inputTitle = document.getElementById('tasks-form-title');
+        let inputDesc = document.getElementById('tasks-form-desc');
+        let currentTitle = document.getElementById('tasks-header-title').textContent;
+        let currentDesc = document.getElementById('tasks-header-desc').textContent;
+        inputTitle.value = currentTitle;
+        inputDesc.value = currentDesc;
+        editProjectForm.style.display = 'flex'
+        tasksHeaderTitle.style.display = 'none'
+        tasksHeaderEditButton.style.display = 'none'
+    }
+
+    //when edit cancel button is clicked, hide form and reset header
+    tasksHeaderCancelButton.onclick = function() {
+        editProjectForm.style.display = 'none'
+        tasksHeaderTitle.style.display = 'flex'
+        tasksHeaderEditButton.style.display = 'flex'
     }
 
 })();

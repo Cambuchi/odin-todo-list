@@ -53,20 +53,56 @@ const initialize = () => {
     const tasksHeader = document.createElement('div');
     tasksHeader.id = 'tasks-header';
 
+    //create the task header
     const tasksHeaderWrapper = document.createElement('div');
     tasksHeaderWrapper.id = 'tasks-header-wrapper';
-
     const tasksHeaderTitle = document.createElement('h2');
     tasksHeaderTitle.textContent = 'No Projects Yet';
     tasksHeaderTitle.id = 'tasks-header-title';
-
     const tasksHeaderDesc = document.createElement('h3');
     tasksHeaderDesc.textContent = 'No Project Description Yet';
     tasksHeaderDesc.id = 'tasks-header-desc';
 
+    tasksHeaderWrapper.appendChild(tasksHeaderTitle);
+    tasksHeaderWrapper.appendChild(tasksHeaderDesc);
+
+    //create the task header form for editing Project details
+    const tasksForm = document.createElement('form');
+    tasksForm.id = 'tasks-form'
+    const tasksFormWrapper = document.createElement('div');
+    tasksFormWrapper.id = 'tasks-form-wrapper';
+    const tasksFormTitle = document.createElement('input');
+    tasksFormTitle.type = 'text';
+    tasksFormTitle.id = 'tasks-form-title';
+    tasksFormTitle.required = true;
+    const tasksFormDesc = document.createElement('input');
+    tasksFormDesc.type = 'text';
+    tasksFormDesc.id = 'tasks-form-desc';
+
+    //create the buttons for submitting project edit
+    const tasksFormSubmit = document.createElement('button');
+    tasksFormSubmit.id = 'tasks-form-submit';
+    tasksFormSubmit.className = 'btn-submit form-btn';
+    tasksFormSubmit.textContent = 'Submit';
+    tasksFormSubmit.type = 'submit';
+
+    const tasksFormCancel = document.createElement('button');
+    tasksFormCancel.id = 'tasks-form-cancel';
+    tasksFormCancel.className = 'btn-cancel form-btn';
+    tasksFormCancel.textContent = 'Cancel';
+    tasksFormCancel.type = 'button';
+
+    tasksFormWrapper.appendChild(tasksFormTitle);
+    tasksFormWrapper.appendChild(tasksFormDesc);
+
+    tasksForm.appendChild(tasksFormWrapper);
+    tasksForm.appendChild(tasksFormSubmit);
+    tasksForm.appendChild(tasksFormCancel);
+
+    //create the edit button in the task header
     const tasksEdit = document.createElement('div');
     tasksEdit.id = 'tasks-edit';
-    tasksEdit.classList = 'btn'
+    tasksEdit.classList = 'btn';
     const tasksEditText = document.createElement('p');
     tasksEditText.id = 'tasks-edit-text';
     tasksEditText.textContent = 'Edit Project';
@@ -77,9 +113,11 @@ const initialize = () => {
     tasksEdit.appendChild(tasksEditPen);
     tasksEdit.appendChild(tasksEditText);
 
+    //create the content area for the tasks
     const tasksContent = document.createElement('div');
     tasksContent.id = 'tasks-content';
 
+    //create the button for adding tasks
     const tasksAdd = document.createElement('div');
     tasksAdd.id = 'tasks-add';
     tasksAdd.classList = 'btn'
@@ -93,8 +131,7 @@ const initialize = () => {
     tasksAdd.appendChild(tasksAddPlus);
     tasksAdd.appendChild(tasksAddText);
 
-    tasksHeaderWrapper.appendChild(tasksHeaderTitle);
-    tasksHeaderWrapper.appendChild(tasksHeaderDesc);
+    tasksHeader.appendChild(tasksForm)
     tasksHeader.appendChild(tasksHeaderWrapper);
     tasksHeader.appendChild(tasksEdit);
 
