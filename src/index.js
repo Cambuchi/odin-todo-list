@@ -266,6 +266,25 @@ const ToDoListDOM = (() => {
         project.appendChild(trash);
         content.appendChild(project);
     }
+    
+    //when a projects name is clicked, switches to that project's tasks & highlights as active
+    const addProjectNameClick = (title) => {
+        const current = findActiveElement(title, '.project-item-text');
+        current.onclick = function() {
+            populateTasks(data, title);
+            changeActiveProject(title);
+        }
+    }
+
+    //when project trash icon is clicked, delete that project from DOM & memory
+    const addProjectTrashClick = (title) => {
+        const currentText = findActiveElement(title, '.project-item-text');
+        const currentTrash = currentText.nextElementSibling
+        currentTrash.onclick = function() {
+            const title = currentTrash.parentNode.textContent;
+            ToDoList.deleteProject(title)
+        }
+    }
 
     //changes active project to be highlighted in panel
     const changeActiveProject = (currentTitle) => {
@@ -291,25 +310,6 @@ const ToDoListDOM = (() => {
         tasksHeaderEditButton.style.display = 'flex';
     }
 
-    //when a projects name is clicked, switches to that project's tasks & highlights as active
-    const addProjectNameClick = (title) => {
-        const current = findActiveElement(title, '.project-item-text');
-        current.onclick = function() {
-            populateTasks(data, title);
-            changeActiveProject(title);
-        }
-    }
-
-    //when project trash icon is clicked, delete that project from DOM & memory
-    const addProjectTrashClick = (title) => {
-        const currentText = findActiveElement(title, '.project-item-text');
-        const currentTrash = currentText.nextElementSibling
-        currentTrash.onclick = function() {
-            const title = currentTrash.parentNode.textContent;
-            ToDoList.deleteProject(title)
-        }
-    }
-
     //when no projects are selected or current projected is deleted, special DOM display
     const blankProject = () => {
         //display info telling user that there is no project selected
@@ -327,15 +327,14 @@ const ToDoListDOM = (() => {
     return {
         populateProjects,
         populateTasks,
+        findActiveElement,
+        removeActiveElement,
         addProjectContent,
         addProjectNameClick,
         addProjectTrashClick,
         changeActiveProject,
-        blankProject,
         showProjectEditButton,
-        findActiveElement,
-        removeActiveElement,
-
+        blankProject,
     }
 
 })();
@@ -418,7 +417,7 @@ const ToDoList = (() => {
  
 })();
 
-//IIFE to initialize non-recreated event handlers
+//IIFE to initialize non-generated event handlers & page functionality
 (() => {
     ToDoListDOM.populateProjects(data);
     ToDoList.updateProjectDOM(currentProject);
@@ -456,12 +455,14 @@ const ToDoList = (() => {
     const tasksHeaderEditButton = document.getElementById('tasks-edit')
     const tasksHeaderCancelButton = document.getElementById('tasks-form-cancel')
 
+    //show the project edit panel
     function showProjectEdit() {
         editProjectForm.style.display = 'flex'
         tasksHeaderTitle.style.display = 'none'
         tasksHeaderEditButton.style.display = 'none'
     }
 
+    //hide the project edit panel
     function hideProjectEdit() {
         editProjectForm.style.display = 'none'
         tasksHeaderTitle.style.display = 'flex'
@@ -470,6 +471,7 @@ const ToDoList = (() => {
 
     //when edit button is clicked, change styles to reveal the edit form
     tasksHeaderEditButton.onclick = function() {
+        //fill in the edit form with current values of project info
         let inputTitle = document.getElementById('tasks-form-title');
         let inputDesc = document.getElementById('tasks-form-desc');
         let currentTitle = document.getElementById('tasks-header-title').textContent;
@@ -479,12 +481,12 @@ const ToDoList = (() => {
         showProjectEdit()
     }
 
-    //when edit cancel button is clicked, hide form and reset header
+    //when edit cancel button is clicked, hide form
     tasksHeaderCancelButton.onclick = function() {
         hideProjectEdit()
     }
 
-    //when edit project form is submitted
+    //logic when edit project form is submitted 
     editProjectForm.onsubmit = editProjectSubmit;
     
     function editProjectSubmit(event) {

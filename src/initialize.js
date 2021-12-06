@@ -6,7 +6,7 @@ const initialize = () => {
     //create the header
     const header = document.createElement('div');
     header.id = 'header';
-    header.textContent = "To Do List"
+    header.textContent = "To Do List:"
     body.appendChild(header)
 
     //create the content wrapper
@@ -20,7 +20,7 @@ const initialize = () => {
     const projectsHeader = document.createElement('div');
     projectsHeader.id = 'projects-header'
 
-    const projectsHeaderText = document.createElement('h2');
+    const projectsHeaderText = document.createElement('p');
     projectsHeaderText.textContent = 'Projects';
     projectsHeaderText.id = 'projects-header-text'
 
@@ -56,10 +56,10 @@ const initialize = () => {
     //create the task header
     const tasksHeaderWrapper = document.createElement('div');
     tasksHeaderWrapper.id = 'tasks-header-wrapper';
-    const tasksHeaderTitle = document.createElement('h2');
+    const tasksHeaderTitle = document.createElement('p');
     tasksHeaderTitle.textContent = 'No Projects Yet';
     tasksHeaderTitle.id = 'tasks-header-title';
-    const tasksHeaderDesc = document.createElement('h3');
+    const tasksHeaderDesc = document.createElement('p');
     tasksHeaderDesc.textContent = 'No Project Description Yet';
     tasksHeaderDesc.id = 'tasks-header-desc';
 
