@@ -254,12 +254,38 @@ body {
 
 .task-edit {
     color: #ff3f3f;
+    transition: all 0.3s ease;
+}
+
+.task-edit:hover {
+    filter: brightness(150%);
+    transform: scale(1.35);
+    transition: all 0.3s ease;
 }
 
 .task-trash, .project-trash {
-    width: 25px;
+    width: 15px;
     cursor: pointer;
+    color: #eaebeb;
+    transition: all 0.3s ease;
+
 }
+
+.task-trash:hover, .project-trash:hover {
+    color: #ffffff;
+    filter: brightness(150%);
+    transform: scale(1.35);
+    transition: all 0.3s ease;
+}
+
+@keyframes trash {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.35);
+    }
+  }
 
 .task-title, .task-date, .task-edit, .task-trash, .task-detail {
     margin: 0 0 0 15px;
@@ -445,4 +471,8 @@ body {
     color: #fff;
     padding: 10px 5px;
     border-radius: 5px;
+}
+
+img {
+
 }
