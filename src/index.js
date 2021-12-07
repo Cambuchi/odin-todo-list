@@ -1,4 +1,4 @@
-import { format, compareAsc, parse } from 'date-fns'
+import { formatDuration, intervalToDuration, format } from 'date-fns'
 import './style.css';
 import './modern-normalize.css';
 import TrashIcon from './assets/trash.png'
@@ -299,7 +299,8 @@ const ToDoListDOM = (() => {
         const taskFormSubmit = document.createElement('button');
         taskFormSubmit.className = 'task-form-submit btn-submit form-btn';
         taskFormSubmit.textContent = 'Submit';
-        taskFormSubmit.type = 'submit';
+        taskFormSubmit.type = 'button';
+        ToDoList.submitTask(taskFormSubmit)
 
         upper.appendChild(taskMain);
         upper.appendChild(taskDate);
@@ -419,6 +420,13 @@ const ToDoListDOM = (() => {
         }
     }
 
+    const getTaskIndexFromForm = (element) => {
+        let child = element.parentNode
+        let parent = child.parentNode
+        let index = Array.prototype.indexOf.call(parent.children, child);
+        return index
+    }
+
     //changes active project to be highlighted in panel
     const changeActiveProject = (currentTitle) => {
         //if blank title is passed in, don't highlight any project
@@ -468,6 +476,7 @@ const ToDoListDOM = (() => {
         changeActiveProject,
         showProjectEditButton,
         blankProject,
+        getTaskIndexFromForm,
     }
 
 })();
@@ -540,11 +549,49 @@ const ToDoList = (() => {
         }
     }
 
+    const submitTask = (element) => {
+        element.onclick = function() {
+            //retrieve form information
+            console.log(element);
+            let form = element.parentNode.parentNode;
+            console.log(form)
+            let main = form.querySelector('.task-form-main').value
+            console.log(main)
+            let detail = form.querySelector('.task-form-desc').value
+            console.log(detail)
+            let priority = form.querySelector('select').value
+            console.log(priority)
+            let ISOdate = form.querySelector('.task-form-date').value
+            let date = format(new Date(ISOdate), 'MM/dd/yyyy')
+            console.log(date)
+            let status = 'incomplete'
+            //get index of current task
+            let currentIndex = ToDoListDOM.getTaskIndexFromForm(element);
+            console.log(currentIndex)
+            //get current project task array adn find that specific tasks
+            let currentProject = document.getElementById('tasks-header-title').textContent;
+            let taskData = data[currentProject]['tasks'].find(({index}) => index == currentIndex)
+            let taskArray = data[currentProject]['tasks']
+            //if task doesn't exist (new), then add it into data & update DOM
+            if (taskData == null) {
+                let newTask = ToDoListLogic.createTask(main, detail, priority, date, status, currentIndex)
+                ToDoListLogic.addTask(taskArray, newTask)
+                ToDoListDOM.populateTasks(data, currentProject)
+            } else {
+            //if task exists, then edit current task in data and update DOM
+                let newTask = ToDoListLogic.createTask(main, detail, priority, date, status, currentIndex)
+                ToDoListLogic.editTask(taskArray, newTask, currentIndex)
+                ToDoListDOM.populateTasks(data, currentProject)
+            }
+        }
+    }
+
     return {
         submitProject,
         editProject,
         deleteProject,
         updateProjectDOM,
+        submitTask,
     }
  
 })();
