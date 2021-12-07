@@ -342,7 +342,11 @@ const ToDoListDOM = (() => {
         taskFormCancel.className = 'task-form-cancel btn-cancel form-btn';
         taskFormCancel.textContent = 'Cancel';
         taskFormCancel.type = 'button';
-        addTaskFormCancelClick(taskFormCancel)
+        if (taskData == '') {
+            addTaskFormDelClick(taskFormCancel)
+        } else {
+            addTaskFormCancelClick(taskFormCancel)
+        }
 
         lower.appendChild(taskDesc);
         lower.appendChild(taskPriorityLabel);
@@ -420,10 +424,21 @@ const ToDoListDOM = (() => {
         }
     }
 
+    const addTaskFormDelClick = (element) => {
+        element.onclick = function() {
+            let parent = element.parentNode.parentNode.parentNode
+            parent.remove()
+        }
+    }
+
     const getTaskIndexFromForm = (element) => {
-        let child = element.parentNode
-        let parent = child.parentNode
+        console.log(`element: ${element}`)
+        let child = element.parentNode.parentNode.parentNode
+        console.log(child)
+        let parent = document.getElementById('tasks-content')
+        console.log(parent)
         let index = Array.prototype.indexOf.call(parent.children, child);
+        console.log(index)
         return index
     }
 
@@ -477,6 +492,7 @@ const ToDoListDOM = (() => {
         showProjectEditButton,
         blankProject,
         getTaskIndexFromForm,
+        addTaskContent,
     }
 
 })();
@@ -673,6 +689,20 @@ const ToDoList = (() => {
         event.preventDefault();
         hideProjectEdit()
     }
+
+    //when add task button is clicked
+    const addTaskBtn = document.getElementById('tasks-add')
+    addTaskBtn.onclick = function() {
+        ToDoListDOM.addTaskContent('')
+        let tasks = document.getElementById('tasks-content')
+        let parent = tasks.lastElementChild
+        let main = parent.querySelector('.task-main')
+        let sub = parent.querySelector('.task-sub')
+        let form = parent.querySelector('.task-form')
+        main.style.display = 'none'
+        sub.style.display = 'none'
+        form.style.display = 'flex'
+    } 
 
 })();
 
