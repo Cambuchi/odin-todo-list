@@ -432,13 +432,9 @@ const ToDoListDOM = (() => {
     }
 
     const getTaskIndexFromForm = (element) => {
-        console.log(`element: ${element}`)
         let child = element.parentNode.parentNode.parentNode
-        console.log(child)
         let parent = document.getElementById('tasks-content')
-        console.log(parent)
         let index = Array.prototype.indexOf.call(parent.children, child);
-        console.log(index)
         return index
     }
 
@@ -558,32 +554,25 @@ const ToDoList = (() => {
         ToDoListDOM.changeActiveProject(title);
         //on empty projects, insert defaults and remove edit button
         if (title === '') {
-            console.log('blank fire');
             ToDoListDOM.blankProject();
         } else {
             ToDoListDOM.showProjectEditButton();
         }
     }
 
+    //event sequence tied to submit buttons on task editing/submission forms
     const submitTask = (element) => {
         element.onclick = function() {
             //retrieve form information
-            console.log(element);
             let form = element.parentNode.parentNode;
-            console.log(form)
             let main = form.querySelector('.task-form-main').value
-            console.log(main)
             let detail = form.querySelector('.task-form-desc').value
-            console.log(detail)
             let priority = form.querySelector('select').value
-            console.log(priority)
             let ISOdate = form.querySelector('.task-form-date').value
             let date = format(new Date(ISOdate), 'MM/dd/yyyy')
-            console.log(date)
             let status = 'incomplete'
             //get index of current task
             let currentIndex = ToDoListDOM.getTaskIndexFromForm(element);
-            console.log(currentIndex)
             //get current project task array adn find that specific tasks
             let currentProject = document.getElementById('tasks-header-title').textContent;
             let taskData = data[currentProject]['tasks'].find(({index}) => index == currentIndex)
@@ -702,7 +691,7 @@ const ToDoList = (() => {
         main.style.display = 'none'
         sub.style.display = 'none'
         form.style.display = 'flex'
-    } 
+    }
 
 })();
 
