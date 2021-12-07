@@ -1,4 +1,4 @@
-import { format, compareAsc } from 'date-fns'
+import { format, compareAsc, parse } from 'date-fns'
 import './style.css';
 import './modern-normalize.css';
 import TrashIcon from './assets/trash.png'
@@ -90,7 +90,7 @@ const ToDoListLogic = (() => {
         } else {
             //if key is different but currently exists in data, do nothing & console log reason
             console.log('New Project Title already exists in data. Cannot have duplicate projects.')
-            return true 
+            return true
         }
     }
 
@@ -237,6 +237,7 @@ const ToDoListDOM = (() => {
     }
 
     const addTaskContent = (taskData) => {
+        //target content element
         const tasks = document.getElementById('tasks-content');
         //create task item
         let task = document.createElement('div');
@@ -264,6 +265,7 @@ const ToDoListDOM = (() => {
         let edit = document.createElement('div');
         edit.textContent = '🖉';
         edit.className = 'task-edit';
+        addTaskEditClick(edit)
         //create delete button
         let trash = new Image();
         trash.src = TrashIcon
@@ -313,6 +315,7 @@ const ToDoListDOM = (() => {
         taskPriorityLabel.textContent = 'Priority: ';
         const taskPrioritySelect = document.createElement('select');
         taskPrioritySelect.name = 'choice';
+        taskPrioritySelect.class = 'task-form-select'
         const none = document.createElement('option');
         none.value = 'none';
         none.textContent = 'None';
@@ -338,6 +341,7 @@ const ToDoListDOM = (() => {
         taskFormCancel.className = 'task-form-cancel btn-cancel form-btn';
         taskFormCancel.textContent = 'Cancel';
         taskFormCancel.type = 'button';
+        addTaskFormCancelClick(taskFormCancel)
 
         lower.appendChild(taskDesc);
         lower.appendChild(taskPriorityLabel);
@@ -369,6 +373,49 @@ const ToDoListDOM = (() => {
             } else {
                 element.parentNode.nextElementSibling.style.display = 'flex';
             }
+        }
+    }
+
+    const addTaskEditClick = (element) => {
+        element.onclick = function() {
+            let parent = element.parentNode.parentNode
+            let main = parent.querySelector('.task-main')
+            let sub = parent.querySelector('.task-sub')
+            let form = parent.querySelector('.task-form')
+
+            main.style.display = 'none'
+            sub.style.display = 'none'
+            form.style.display = 'flex'
+
+            //populate edit form with current task object taskData
+            let current = document.getElementById('tasks-header-title').textContent;
+            let taskData = data[current]['tasks'].find(({index}) => index == parent.id)
+
+            let newMainText = form.querySelector('.task-form-main')
+            let newDescText = form.querySelector('.task-form-desc')
+            let newDate = form.querySelector('.task-form-date')
+            let priority = form.querySelector('select')
+            //format date to ISO format to prefill date picker value
+            let date = new Date(taskData.date)
+            let isoDate = date.toISOString().slice(0, 10)
+
+            newDate.value = isoDate
+            newMainText.value = taskData.main
+            newDescText.value = taskData.detail
+            priority.value = taskData.priority.toLowerCase()
+        }
+    }
+
+    const addTaskFormCancelClick = (element) => {
+        element.onclick = function() {
+            let parent = element.parentNode.parentNode.parentNode
+            let main = parent.querySelector('.task-main')
+            let sub = parent.querySelector('.task-sub')
+            let form = parent.querySelector('.task-form')
+
+            main.style.display = 'flex'
+            sub.style.display = 'none'
+            form.style.display = 'none'
         }
     }
 
