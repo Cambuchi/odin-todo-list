@@ -1,4 +1,3 @@
-import { formatDuration, intervalToDuration, format } from 'date-fns'
 import './style.css';
 import './modern-normalize.css';
 import TrashIcon from './assets/trash.png'
@@ -59,7 +58,7 @@ const data = {
     }
 }
 
-let currentProject = 'Project1 Name'
+let currentProject = Object.keys(data)[0]
 
 //module pattern containing all of the todo list data logic
 const ToDoListLogic = (() => {
@@ -253,6 +252,7 @@ const ToDoListDOM = (() => {
         if (taskData.status == 'complete') {
             checkbox.classList.add('checked')
         }
+        addCheckboxClick(checkbox);
         //create task main text
         let taskTitle = document.createElement('div');
         taskTitle.textContent = taskData.main;
@@ -391,6 +391,25 @@ const ToDoListDOM = (() => {
         task.append(taskForm);
 
         tasks.appendChild(task);
+    }
+
+    const addCheckboxClick = (element) => {
+        element.onclick = function() {
+            let main = element.nextElementSibling
+            let index = element.parentNode.parentNode.id
+            let current = document.getElementById('tasks-header-title').textContent;
+            if (main.classList.contains('complete')) {
+                element.classList.remove('checked')
+                main.classList.remove('complete')
+                main.classList.add('incomplete')
+                data[current]['tasks'][index].status = 'incomplete'
+            } else if (main.classList.contains('incomplete')) {
+                element.classList.add('checked')
+                main.classList.add('complete')
+                main.classList.remove('incomplete')
+                data[current]['tasks'][index].status = 'complete'
+            }
+        }
     }
 
     const addTaskDescDisplayClick = (element) => {
