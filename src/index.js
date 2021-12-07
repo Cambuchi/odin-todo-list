@@ -178,57 +178,7 @@ const ToDoListDOM = (() => {
         //populate task content with tasks from data
         for (let i = 0; i < data[currentProject]['tasks'].length; i++) {
             let taskData = data[currentProject]['tasks'][i];
-
-            //create DOM elements
-            let task = document.createElement('div');
-            task.classList.add('task', taskData.priority);
-            task.id = taskData.index;
-
-            let main = document.createElement('div');
-            main.className = 'task-main';
-
-            let checkbox = document.createElement('div');
-            checkbox.className = 'checkbox';
-
-            let taskTitle = document.createElement('div');
-            taskTitle.textContent = taskData.main;
-            taskTitle.classList.add('task-title', taskData.status);
-
-            let date = document.createElement('div');
-            date.textContent = taskData.date;
-            date.className = 'task-date';
-
-            let edit = document.createElement('div');
-            edit.textContent = '🖉';
-            edit.className = 'task-edit';
-
-            let trash = new Image();
-            trash.src = TrashIcon
-            trash.className = 'task-trash';
-
-            let sub = document.createElement('div');
-            sub.className = 'task-sub';
-
-            let checkboxSpace = document.createElement('div');
-            checkboxSpace.className = 'checkbox-space';
-
-            let taskDetail = document.createElement('div');
-            taskDetail.textContent = taskData.detail;
-            taskDetail.className = 'task-detail'
-
-            sub.appendChild(checkboxSpace)
-            sub.appendChild(taskDetail)
-
-            main.appendChild(checkbox);
-            main.appendChild(taskTitle);
-            main.appendChild(date);
-            main.appendChild(edit);
-            main.appendChild(trash);
-
-            task.appendChild(main)
-            task.appendChild(sub)
-
-            tasks.appendChild(task)
+            addTaskContent(taskData)
         }
     }
 
@@ -283,6 +233,142 @@ const ToDoListDOM = (() => {
         currentTrash.onclick = function() {
             const title = currentTrash.parentNode.textContent;
             ToDoList.deleteProject(title)
+        }
+    }
+
+    const addTaskContent = (taskData) => {
+        const tasks = document.getElementById('tasks-content');
+        //create task item
+        let task = document.createElement('div');
+        task.classList.add('task', taskData.priority);
+        task.id = taskData.index;
+        //create main task line
+        let main = document.createElement('div');
+        main.classList = 'task-main';
+        //create task checkbox
+        let checkbox = document.createElement('div');
+        checkbox.classList = 'checkbox';
+        if (taskData.status == 'complete') {
+            checkbox.classList.add('checked')
+        }
+        //create task main text
+        let taskTitle = document.createElement('div');
+        taskTitle.textContent = taskData.main;
+        taskTitle.classList.add('task-title', taskData.status);
+        addTaskDescDisplayClick(taskTitle);
+        //create task date
+        let date = document.createElement('div');
+        date.textContent = taskData.date;
+        date.className = 'task-date';
+        //create edit button
+        let edit = document.createElement('div');
+        edit.textContent = '🖉';
+        edit.className = 'task-edit';
+        //create delete button
+        let trash = new Image();
+        trash.src = TrashIcon
+        trash.className = 'task-trash';
+
+        //create sub task line (hidden description text that shows on popup)
+        let sub = document.createElement('div');
+        sub.className = 'task-sub';
+        //create spacer for checkbox to align main and desc text
+        let checkboxSpace = document.createElement('div');
+        checkboxSpace.className = 'checkbox-space';
+        //create description text
+        let taskDetail = document.createElement('div');
+        taskDetail.textContent = taskData.detail;
+        taskDetail.className = 'task-detail';
+
+        //create the form for editing a task
+        const taskForm = document.createElement('form');
+        taskForm.classList = 'task-form';
+
+        const upper = document.createElement('div');
+        upper.classList = 'task-form-upper';
+        const taskMain = document.createElement('input');
+        taskMain.type = 'text';
+        taskMain.classList = 'task-form-main';
+        taskMain.required = true;
+        const taskDate = document.createElement('input');
+        taskDate.type = 'date';
+        taskDate.classList = 'task-form-date';
+        taskDate.name = 'due';
+        const taskFormSubmit = document.createElement('button');
+        taskFormSubmit.className = 'task-form-submit btn-submit form-btn';
+        taskFormSubmit.textContent = 'Submit';
+        taskFormSubmit.type = 'submit';
+
+        upper.appendChild(taskMain);
+        upper.appendChild(taskDate);
+        upper.appendChild(taskFormSubmit);
+
+        const lower = document.createElement('div');
+        lower.classList = 'task-form-lower';
+        const taskDesc = document.createElement('input');
+        taskDesc.type = 'text';
+        taskDesc.classList = 'task-form-desc';
+        const taskPriorityLabel = document.createElement('label');
+        taskPriorityLabel.classList = 'task-form-p-label';
+        taskPriorityLabel.textContent = 'Priority: ';
+        const taskPrioritySelect = document.createElement('select');
+        taskPrioritySelect.name = 'choice';
+        const none = document.createElement('option');
+        none.value = 'none';
+        none.textContent = 'None';
+        none.selected = true;
+        const low = document.createElement('option');
+        low.value = 'low';
+        low.textContent = 'Low';
+        const medium = document.createElement('option');
+        medium.value = 'medium';
+        medium.textContent = 'Medium';
+        const high = document.createElement('option');
+        high.value = 'high';
+        high.textContent = 'High';
+
+        taskPrioritySelect.appendChild(none);
+        taskPrioritySelect.appendChild(low);
+        taskPrioritySelect.appendChild(medium);
+        taskPrioritySelect.appendChild(high);
+
+        taskPriorityLabel.appendChild(taskPrioritySelect);
+
+        const taskFormCancel = document.createElement('button');
+        taskFormCancel.className = 'task-form-cancel btn-cancel form-btn';
+        taskFormCancel.textContent = 'Cancel';
+        taskFormCancel.type = 'button';
+
+        lower.appendChild(taskDesc);
+        lower.appendChild(taskPriorityLabel);
+        lower.appendChild(taskFormCancel);
+
+        taskForm.appendChild(upper);
+        taskForm.appendChild(lower);
+
+        sub.appendChild(checkboxSpace);
+        sub.appendChild(taskDetail);
+
+        main.appendChild(checkbox);
+        main.appendChild(taskTitle);
+        main.appendChild(date);
+        main.appendChild(edit);
+        main.appendChild(trash);
+
+        task.appendChild(main);
+        task.appendChild(sub);
+        task.append(taskForm);
+
+        tasks.appendChild(task);
+    }
+
+    const addTaskDescDisplayClick = (element) => {
+        element.onclick = function() {
+            if (element.parentNode.nextElementSibling.style.display == 'flex') {
+                element.parentNode.nextElementSibling.style.display = 'none';
+            } else {
+                element.parentNode.nextElementSibling.style.display = 'flex';
+            }
         }
     }
 
@@ -376,7 +462,6 @@ const ToDoList = (() => {
             //change header above tasks to new project edit info
             currentTitle.textContent = inputTitle.value;
             currentDesc.textContent = inputDesc.value;
-            
         }
     }
 
