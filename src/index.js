@@ -14,7 +14,7 @@ const data = {
                 "main": "make a default task",
                 "detail": "decide on JSON format",
                 "priority": "high",
-                "date": "12/3/2021",
+                "date": "2021-12-03",
                 "status": "complete",
                 "index": 0,
             },
@@ -22,7 +22,7 @@ const data = {
                 "main": "make another default task",
                 "detail": "decide on JSON format",
                 "priority": "medium",
-                "date": "12/6/2021",
+                "date": "2021-12-06",
                 "status": "incomplete",
                 "index": 1,
             },
@@ -35,7 +35,7 @@ const data = {
                 "main": "test JSON",
                 "detail": "format design",
                 "priority": "high",
-                "date": "12/3/2021",
+                "date": "2021-12-26",
                 "status": "incomplete",
                 "index": 0,
             },
@@ -51,7 +51,7 @@ const data = {
                 "main": "test JSON3",
                 "detail": "format design",
                 "priority": "medium",
-                "date": "12/6/2021",
+                "date": "2021-12-05",
                 "status": "complete",
                 "index": 2,
             }
@@ -236,6 +236,7 @@ const ToDoListDOM = (() => {
         }
     }
 
+    //with a task object, create a task element and add it into tasks content
     const addTaskContent = (taskData) => {
         //target content element
         const tasks = document.getElementById('tasks-content');
@@ -259,8 +260,16 @@ const ToDoListDOM = (() => {
         addTaskDescDisplayClick(taskTitle);
         //create task date
         let date = document.createElement('div');
-        date.textContent = taskData.date;
         date.className = 'task-date';
+        if (taskData.date == '') {
+            date.textContent = ''
+        } else {
+            const dt = new Date(taskData.date);
+            const year = dt.getUTCFullYear()
+            const month = dt.getUTCMonth() + 1
+            const day = dt.getUTCDate()
+            date.textContent = `${month}/${day}/${year}`
+        }
         //create edit button
         let edit = document.createElement('div');
         edit.textContent = '🖉';
@@ -270,6 +279,7 @@ const ToDoListDOM = (() => {
         let trash = new Image();
         trash.src = TrashIcon
         trash.className = 'task-trash';
+        ToDoList.deleteTask(trash)
 
         //create sub task line (hidden description text that shows on popup)
         let sub = document.createElement('div');
@@ -292,10 +302,19 @@ const ToDoListDOM = (() => {
         taskMain.type = 'text';
         taskMain.classList = 'task-form-main';
         taskMain.required = true;
+        if (taskData == '') {
+            taskMain.placeholder = 'To do item'
+        }
         const taskDate = document.createElement('input');
         taskDate.type = 'date';
         taskDate.classList = 'task-form-date';
         taskDate.name = 'due';
+        if (taskData == '') {
+            let date = new Date()
+            let isoDate = date.toISOString().slice(0, 10)
+            taskDate.value = isoDate
+        } 
+
         const taskFormSubmit = document.createElement('button');
         taskFormSubmit.className = 'task-form-submit btn-submit form-btn';
         taskFormSubmit.textContent = 'Submit';
@@ -311,6 +330,9 @@ const ToDoListDOM = (() => {
         const taskDesc = document.createElement('input');
         taskDesc.type = 'text';
         taskDesc.classList = 'task-form-desc';
+        if (taskData == '') {
+            taskDesc.placeholder = 'To do item description'
+        }
         const taskPriorityLabel = document.createElement('label');
         taskPriorityLabel.classList = 'task-form-p-label';
         taskPriorityLabel.textContent = 'Priority: ';
@@ -401,10 +423,13 @@ const ToDoListDOM = (() => {
             let newDate = form.querySelector('.task-form-date')
             let priority = form.querySelector('select')
             //format date to ISO format to prefill date picker value
-            let date = new Date(taskData.date)
-            let isoDate = date.toISOString().slice(0, 10)
-
-            newDate.value = isoDate
+            if (taskData.date == '') {
+                newDate.value = new Date()
+            } else {
+                let date = new Date(taskData.date)
+                let isoDate = date.toISOString().slice(0, 10)
+                newDate.value = isoDate
+            }
             newMainText.value = taskData.main
             newDescText.value = taskData.detail
             priority.value = taskData.priority.toLowerCase()
@@ -431,9 +456,19 @@ const ToDoListDOM = (() => {
         }
     }
 
-    const getTaskIndexFromForm = (element) => {
-        let child = element.parentNode.parentNode.parentNode
+    //retrieve index of clicked item for task manipulation
+    const getTaskIndex = (element) => {
+
+        let child;
+        //target element containing all the tasks
         let parent = document.getElementById('tasks-content')
+        //find the individual task element (depends on what is clicked)
+        if (element.classList.contains('task-form-cancel') || element.classList.contains('task-form-submit')) {
+            child = element.parentNode.parentNode.parentNode
+        } else if (element.classList.contains('task-trash') == true) {
+            child = element.parentNode.parentNode
+        }
+        //find the index of the task and return it
         let index = Array.prototype.indexOf.call(parent.children, child);
         return index
     }
@@ -487,7 +522,7 @@ const ToDoListDOM = (() => {
         changeActiveProject,
         showProjectEditButton,
         blankProject,
-        getTaskIndexFromForm,
+        getTaskIndex,
         addTaskContent,
     }
 
@@ -568,11 +603,10 @@ const ToDoList = (() => {
             let main = form.querySelector('.task-form-main').value
             let detail = form.querySelector('.task-form-desc').value
             let priority = form.querySelector('select').value
-            let ISOdate = form.querySelector('.task-form-date').value
-            let date = format(new Date(ISOdate), 'MM/dd/yyyy')
+            let date = form.querySelector('.task-form-date').value
             let status = 'incomplete'
             //get index of current task
-            let currentIndex = ToDoListDOM.getTaskIndexFromForm(element);
+            let currentIndex = ToDoListDOM.getTaskIndex(element);
             //get current project task array adn find that specific tasks
             let currentProject = document.getElementById('tasks-header-title').textContent;
             let taskData = data[currentProject]['tasks'].find(({index}) => index == currentIndex)
@@ -591,12 +625,26 @@ const ToDoList = (() => {
         }
     }
 
+    //event sequence for deleting a tasks
+    const deleteTask = (element) => {
+        element.onclick = function() {
+            let index = ToDoListDOM.getTaskIndex(element);
+            //get current project task array adn find that specific task
+            let currentProject = document.getElementById('tasks-header-title').textContent;
+            data[currentProject]['tasks'] = ToDoListLogic.deleteTask(data[currentProject]['tasks'], index)
+            ToDoListLogic.renumberTasks(data[currentProject]['tasks'])
+            let parent = element.parentNode.parentNode
+            parent.remove()
+        }
+    }
+
     return {
         submitProject,
         editProject,
         deleteProject,
         updateProjectDOM,
         submitTask,
+        deleteTask,
     }
  
 })();
