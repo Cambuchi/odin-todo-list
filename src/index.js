@@ -20,7 +20,7 @@ const data = {
             {
                 "main": "Vacuum",
                 "detail": "The roomba leaves much to be desired.",
-                "priority": "medium",
+                "priority": "none",
                 "date": "2021-12-12",
                 "status": "incomplete",
                 "index": 1,
@@ -36,7 +36,7 @@ const data = {
             {
                 "main": "Clean kitchen",
                 "detail": "Wipe down the counters and range/hood.",
-                "priority": "medium",
+                "priority": "low",
                 "date": "2021-12-12",
                 "status": "complete",
                 "index": 3,
@@ -52,7 +52,7 @@ const data = {
             {
                 "main": "Clean computer station",
                 "detail": "A messy workplace is no good.",
-                "priority": "low",
+                "priority": "none",
                 "date": "2021-12-12",
                 "status": "incomplete",
                 "index": 5,
