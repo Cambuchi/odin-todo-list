@@ -479,3 +479,22 @@ body {
 .complete {
     text-decoration: line-through
 }
+
+.low {
+    border-color: #9ecaed;
+    box-shadow: 0 0 3px #9ecaed;
+}
+
+.medium {
+    border-color: #ede29e;
+    box-shadow: 0 0 3px #ede29e;
+}
+
+.high { 
+    border-color: #ed9eb4;
+    box-shadow: 0 0 3px #ed9eb4;
+}
+
+.task-title:hover:after {
+    content: '\00a0\00a0▼';
+}

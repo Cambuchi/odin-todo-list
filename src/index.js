@@ -6,52 +6,84 @@ import {initialize} from './initialize';
 initialize();
 
 const data = {
-    "Project1 Name":{
-        "description":"Project description 1",
+    "Clean The House":{
+        "description":"Weekly chores to do",
         "tasks": [
             {
-                "main": "make a default task",
-                "detail": "decide on JSON format",
-                "priority": "high",
-                "date": "2021-12-03",
-                "status": "complete",
+                "main": "Do laundry",
+                "detail": "Remember to separate your colors and whites!",
+                "priority": "medium",
+                "date": "2021-12-12",
+                "status": "incomplete",
                 "index": 0,
             },
             {
-                "main": "make another default task",
-                "detail": "decide on JSON format",
+                "main": "Vacuum",
+                "detail": "The roomba leaves much to be desired.",
                 "priority": "medium",
-                "date": "2021-12-06",
+                "date": "2021-12-12",
                 "status": "incomplete",
                 "index": 1,
             },
+            {
+                "main": "Mop",
+                "detail": "Do early on a sunny day so it dries faster.",
+                "priority": "high",
+                "date": "2021-12-12",
+                "status": "incomplete",
+                "index": 2,
+            },
+            {
+                "main": "Clean kitchen",
+                "detail": "Wipe down the counters and range/hood.",
+                "priority": "medium",
+                "date": "2021-12-12",
+                "status": "complete",
+                "index": 3,
+            },
+            {
+                "main": "Take out trash & recycling",
+                "detail": "Make sure to check the kitty litter robot.",
+                "priority": "medium",
+                "date": "2021-12-12",
+                "status": "complete",
+                "index": 4,
+            },
+            {
+                "main": "Clean computer station",
+                "detail": "A messy workplace is no good.",
+                "priority": "low",
+                "date": "2021-12-12",
+                "status": "incomplete",
+                "index": 5,
+            },
         ]
     },
-    "Project2 Name":{
-        "description":"Project description 2",
+    "To Do List by Cam Nguyen":{
+        "description":"Project for the ODIN programming course",
         "tasks": [
             {
-                "main": "test JSON",
-                "detail": "format design",
+                "main": "More features to come soon.",
+                "detail": "Going to add sorting and auto groups like Today/Tomorrow/etc.",
                 "priority": "high",
                 "date": "2021-12-26",
                 "status": "incomplete",
                 "index": 0,
             },
             {
-                "main": "test JSON",
-                "detail": "format design",
+                "main": "Made lovingly in Javascript/CSS and built with webpack.",
+                "detail": "All javascript and CSS was handwritten!",
                 "priority": "medium",
-                "date": "12/6/2021",
+                "date": "2021-12-15",
                 "status": "incomplete",
                 "index": 1,
             },
             {
-                "main": "test JSON3",
-                "detail": "format design",
-                "priority": "medium",
-                "date": "2021-12-05",
-                "status": "complete",
+                "main": "Thanks for visiting.",
+                "detail": "I promise the code will be cleaner next time.",
+                "priority": "low",
+                "date": "2021-12-15",
+                "status": "incomplete",
                 "index": 2,
             }
         ]
