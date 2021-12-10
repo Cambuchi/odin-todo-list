@@ -1,31 +1,17 @@
-import './style/style.css';
-import './style/modern-normalize.css';
-import {initialize} from './scripts/initialize';
-import * as Logic from './scripts/logic'
-import * as DOM from './scripts/dom'
-import * as ToDoList from './scripts/ToDoList'
+import * as Logic from './logic'
+import * as DOM from './dom'
 import * as DataStorage from './scripts/datastorage'
 
-//IIFE to encapsulate site creation, data, and event handlers
-(() => {
-    //retrieve the data
-    let data = DataStorage.retrieveData('todolist')
-    console.log(data)
+//module to coordinate all of the DOM, Logic, and Data modules into the event listeners
 
-    //create the initial page structure
-    initialize();
-
-    DOM.populateGroups(data)
-    DOM.clickGroupText(Object.keys(data)[0])
-    DOM.populateTasks(data, Object.keys(data)[0])
-
-    document.body.addEventListener('click', function(event) {
+const createListeners = () => {
+    document.body.addEventListener('click', function (event) {
         if (event.target !== event.currentTarget) {
             //when item in sidebar is clicked, makes active & populates gorup tasks
             if (event.target.classList.contains('group-item-text')) {
                 DOM.clickGroupText(event)
                 DOM.populateTasks(data, event.target.textContent)
-            } 
+            }
             //when add groups button is clicked, display the modal for submitting groups
             if (event.target.matches('#sidebar-add-btn, #sidebar-add-btn *')) {
                 DOM.clickAddGroupBtn();
@@ -75,8 +61,8 @@ import * as DataStorage from './scripts/datastorage'
                 if (DOM.validityChecker(editTitle, editTitle.value)) {
                     return
                 }
-                let duplicate = Logic.editGroup(data, editTitle.value, currentTitle.textContent, 
-                                                editDetails.value, currentDetails.textContent)
+                let duplicate = Logic.editGroup(data, editTitle.value, currentTitle.textContent,
+                    editDetails.value, currentDetails.textContent)
                 if (duplicate) {
                     DOM.clickMainHeaderFormCancel();
                     return
@@ -143,7 +129,7 @@ import * as DataStorage from './scripts/datastorage'
                 let taskData = data[currentGroup]['tasks'].find(({ index }) => index == currentIndex)
                 //get the array of tasks within the group to add to/edit from
                 let taskArray = data[currentGroup]['tasks']
-                    //if task doesn't exist (new), then add it into data & update DOM
+                //if task doesn't exist (new), then add it into data & update DOM
                 if (taskData == null) {
                     let newTask = Logic.createTask(main, detail, priority, date, status, currentIndex)
                     Logic.addTask(taskArray, newTask)
@@ -172,105 +158,4 @@ import * as DataStorage from './scripts/datastorage'
         }
         event.stopPropagation();
     }, false)
-
-})();
-
-
-
-
-
-//IIFE to initialize non-generated event handlers & page functionality
-// (() => {
-//     ToDoListDOM.populateProjects(data);
-//     ToDoList.updateProjectDOM(currentProject);
-
-//     //add a project via the form submit button
-//     const addProjectForm = document.getElementById('modal-form')
-//     const modal = document.getElementById('modal')
-//     const addProjectBtn = document.getElementById('projects-add')
-//     const cancelProjectBtn = document.getElementById('modal-cancel')
-
-//     //display modal form when project add button is clicked 
-//     addProjectBtn.onclick = function() {
-//         modal.style.display = 'flex'
-//     }
-
-//     //remove modal when cancel is clicked
-//     cancelProjectBtn.onclick = function() {
-//         addProjectForm.reset();
-//         modal.style.display = 'none';
-//     }
-
-//     //when project submit button is clicked, add project, reset form, remove modal
-//     addProjectForm.onsubmit = submitProject;
-
-//     function submitProject(event) {
-//         ToDoList.submitProject();
-//         addProjectForm.reset();
-//         event.preventDefault();
-//         modal.style.display = 'none';
-//     }
-
-//     //add a project via the form submit button
-//     const editProjectForm = document.getElementById('tasks-form');
-//     const tasksHeaderTitle = document.getElementById('tasks-header-wrapper')
-//     const tasksHeaderEditButton = document.getElementById('tasks-edit')
-//     const tasksHeaderCancelButton = document.getElementById('tasks-form-cancel')
-
-//     //show the project edit panel
-//     function showProjectEdit() {
-//         editProjectForm.style.display = 'flex'
-//         tasksHeaderTitle.style.display = 'none'
-//         tasksHeaderEditButton.style.display = 'none'
-//     }
-
-//     //hide the project edit panel
-//     function hideProjectEdit() {
-//         editProjectForm.style.display = 'none'
-//         tasksHeaderTitle.style.display = 'flex'
-//         tasksHeaderEditButton.style.display = 'flex'
-//     }
-
-//     //when edit button is clicked, change styles to reveal the edit form
-//     tasksHeaderEditButton.onclick = function() {
-//         //fill in the edit form with current values of project info
-//         let inputTitle = document.getElementById('tasks-form-title');
-//         let inputDesc = document.getElementById('tasks-form-desc');
-//         let currentTitle = document.getElementById('tasks-header-title').textContent;
-//         let currentDesc = document.getElementById('tasks-header-desc').textContent;
-//         inputTitle.value = currentTitle;
-//         inputDesc.value = currentDesc;
-//         showProjectEdit()
-//     }
-
-//     //when edit cancel button is clicked, hide form
-//     tasksHeaderCancelButton.onclick = function() {
-//         hideProjectEdit()
-//     }
-
-//     //logic when edit project form is submitted 
-//     editProjectForm.onsubmit = editProjectSubmit;
-    
-//     function editProjectSubmit(event) {
-//         ToDoList.editProject();
-//         event.preventDefault();
-//         hideProjectEdit()
-//     }
-
-//     //when add task button is clicked
-//     const addTaskBtn = document.getElementById('tasks-add')
-//     addTaskBtn.onclick = function() {
-//         ToDoListDOM.addTaskContent('')
-//         let tasks = document.getElementById('tasks-content')
-//         let parent = tasks.lastElementChild
-//         let main = parent.querySelector('.task-main')
-//         let sub = parent.querySelector('.task-sub')
-//         let form = parent.querySelector('.task-form')
-//         main.style.display = 'none'
-//         sub.style.display = 'none'
-//         form.style.display = 'flex'
-//     }
-
-// })();
-
-
+}
