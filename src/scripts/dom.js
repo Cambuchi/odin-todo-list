@@ -572,7 +572,16 @@ const clickOption = (event) => {
     let highlightClass = event.target.textContent.toLowerCase();
     task.classList = 'task';
     task.classList.add(highlightClass)
+};
+
+function confirmation() { 
+    let result = confirm("Are you sure about deleting that?");
+    if (result) {
+        return true;
+    }
+    return false;
 }
+    
 
 export {
     populateGroups,
@@ -596,4 +605,5 @@ export {
     clickMainHeaderFormSubmit,
     validityChecker,
     clickOption,
+    confirmation,
 }

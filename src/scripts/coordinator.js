@@ -29,6 +29,9 @@ const createListeners = () => {
             }
             //when group item trash can is clicked, delete the group from data & page
             if (event.target.classList.contains('group-trash')) {
+                if (!DOM.confirmation()) {
+                    return
+                }
                 DOM.clickGroupTrash(event)
                 Logic.deleteGroup(data, event.target.parentNode.textContent)
                 DataStorage.setLocalStorage('todolist', data)
@@ -89,6 +92,9 @@ const createListeners = () => {
             }
             //when trash icon in task item is clicked, delete task from data & DOM
             if (event.target.classList.contains('task-main-trash')) {
+                if (!DOM.confirmation()) {
+                    return
+                }
                 let task = event.target.parentNode.parentNode
                 let currentGroup = document.getElementById('main-header-title').textContent
                 Logic.deleteTask(data[currentGroup], task.id)

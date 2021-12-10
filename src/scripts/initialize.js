@@ -11,11 +11,13 @@ const initialize = () => {
     //create the modal for adding groups
     const modal = createModal();
 
+
     body.appendChild(header)
     body.appendChild(content)
     body.appendChild(footer)
     body.appendChild(modal)
-}
+
+};
 
 //create the header
 const createHeader = () => {
@@ -23,7 +25,7 @@ const createHeader = () => {
     header.id = 'header';
     header.textContent = "To Do List:"
     return header
-}
+};
 
 //create the content
 const createContent = () => {
@@ -34,7 +36,7 @@ const createContent = () => {
     content.appendChild(sidebar);
     content.appendChild(main);
     return content
-}
+};
 
 //create the sidebar inside content
 const createSidebar = () => {
@@ -67,7 +69,7 @@ const createSidebar = () => {
     sidebar.appendChild(sidebarAddBtn);
 
     return sidebar;
-}
+};
 
 //create the main display area inside content
 const createMain = () => {
@@ -169,7 +171,7 @@ const createMain = () => {
     main.appendChild(mainContentAddBtn);
 
     return main;
-}
+};
 
 //create the footer, append the element
 const createFooter = () => {
@@ -177,7 +179,7 @@ const createFooter = () => {
     footer.id = 'footer';
     footer.textContent = "Copyright 2021 Cam Nguyen";
     return footer;
-}
+};
 
 //create the modal content for the new group submit form
 const createModal = () => {
@@ -240,7 +242,7 @@ const createModal = () => {
     modal.appendChild(modalContent);
 
     return modal;
-}
+};
 
 export {
     initialize,
