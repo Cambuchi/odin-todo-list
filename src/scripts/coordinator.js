@@ -129,6 +129,11 @@ const createListeners = () => {
                 let detail = form.querySelector('.task-form-details').value
                 let priority = form.querySelector('select').value
                 let date = form.querySelector('.task-form-date').value
+                const dt = new Date(date);
+                const year = dt.getUTCFullYear()
+                const month = dt.getUTCMonth() + 1
+                const day = dt.getUTCDate()
+                date = `${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}/${year}`
                 let status = 'incomplete'
                 //get index of current task
                 let currentIndex = task.id

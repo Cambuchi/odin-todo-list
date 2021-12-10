@@ -57,14 +57,14 @@
         "tasks": [
             {
                 "main": "More features to come soon.",
-                "detail": "Going to add sorting and auto groups like Today/Tomorrow/etc.",
+                "detail": "Going to add sorting and auto groups like Today/Week/etc.",
                 "priority": "high",
                 "date": "12/26/2021",
                 "status": "incomplete",
                 "index": 0
             },
             {
-                "main": "Made lovingly in Javascript/CSS and built with webpack.",
+                "main": "Made lovingly in Javascript/CSS.",
                 "detail": "All javascript and CSS was handwritten!",
                 "priority": "medium",
                 "date": "12/15/2021",
@@ -72,9 +72,17 @@
                 "index": 1
             },
             {
+                "main": "Built using webpack.",
+                "detail": "No packages were used.",
+                "priority": "low",
+                "date": "12/15/2021",
+                "status": "incomplete",
+                "index": 1
+            },
+            {
                 "main": "Thanks for visiting.",
                 "detail": "I promise the code will be cleaner next time.",
-                "priority": "low",
+                "priority": "none",
                 "date": "12/15/2021",
                 "status": "incomplete",
                 "index": 2
