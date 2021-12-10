@@ -14,7 +14,7 @@ const createListeners = () => {
     
     document.body.addEventListener('click', function (event) {
         if (event.target !== event.currentTarget) {
-            //when item in sidebar is clicked, makes active & populates gorup tasks
+            //when item in sidebar is clicked, makes active & populates group tasks
             if (event.target.classList.contains('group-item-text')) {
                 DOM.clickGroupText(event)
                 DOM.populateTasks(data, event.target.textContent)
@@ -90,10 +90,7 @@ const createListeners = () => {
             //when trash icon in task item is clicked, delete task from data & DOM
             if (event.target.classList.contains('task-main-trash')) {
                 let task = event.target.parentNode.parentNode
-                console.log(task)
-                console.log(task.id)
                 let currentGroup = document.getElementById('main-header-title').textContent
-                console.log(currentGroup)
                 Logic.deleteTask(data[currentGroup], task.id)
                 Logic.renumberTasks(data[currentGroup]['tasks'])
                 DOM.populateTasks(data, currentGroup)
@@ -110,9 +107,11 @@ const createListeners = () => {
                 let task = event.target.parentNode.parentNode.parentNode
                 let currentGroup = document.getElementById('main-header-title').textContent
                 let taskArray = data[currentGroup]['tasks']
-                //reset the priority highlighting for the task list
-                task.classList = 'task'
-                task.classList.add(taskArray[task.id].priority)
+                //reset the priority highlighting for the task list if it's a task edit
+                if (taskArray[task.id] != undefined) {
+                    task.classList = 'task'
+                    task.classList.add(taskArray[task.id].priority)
+                }
                 DOM.clickTaskFormCancelBtn(task, taskArray)
             }
             //when submit button on tasks is clicked, add to data and update DOMException
