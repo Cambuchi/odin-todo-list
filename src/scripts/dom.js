@@ -414,16 +414,20 @@ const createTaskFormPriority = () => {
     taskPrioritySelect.name = 'choice';
     taskPrioritySelect.class = 'task-form-select'
     const none = document.createElement('option');
+    none.classList = 'task-form-option-none option'
     none.value = 'none';
     none.textContent = 'None';
     none.selected = true;
     const low = document.createElement('option');
+    low.classList = 'task-form-option-low option'
     low.value = 'low';
     low.textContent = 'Low';
     const medium = document.createElement('option');
+    medium.classList = 'task-form-option-medium option'
     medium.value = 'medium';
     medium.textContent = 'Medium';
     const high = document.createElement('option');
+    high.classList = 'task-form-option-high option'
     high.value = 'high';
     high.textContent = 'High';
 
@@ -530,7 +534,7 @@ const clickMainHeaderEditBtn = () => {
     
     mainHeaderDisplay.style.display = 'none';
     mainHeaderEditGroupForm.style.display = 'flex'
-}
+};
 
 //DOM events when cancel button in the group edit header form is clicked
 const clickMainHeaderFormCancel = () => {
@@ -538,7 +542,7 @@ const clickMainHeaderFormCancel = () => {
     const mainHeaderEditGroupForm = document.getElementById('main-group-form');
     mainHeaderDisplay.style.display = 'flex';
     mainHeaderEditGroupForm.style.display = 'none'
-}
+};
 
 //DOM events for when a group edit form submit is successfully executed
 const clickMainHeaderFormSubmit = () => {
@@ -551,8 +555,9 @@ const clickMainHeaderFormSubmit = () => {
     currentActiveGroup.textContent = editTitle.value;
     currentTitle.textContent = editTitle.value;
     currentDetails.textContent = editDetails.value;
-}
+};
 
+//checks for validity for fields that are blank and pops up a custom invalid notification
 const validityChecker = (element, text) => {
     if (text == '') {
         element.setCustomValidity('Please do not leave blank.');
@@ -560,6 +565,13 @@ const validityChecker = (element, text) => {
         element.placeholder = 'Please do not leave blank.'
         return true
     }
+};
+
+const clickOption = (event) => {
+    let task = event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+    let highlightClass = event.target.textContent.toLowerCase();
+    task.classList = 'task';
+    task.classList.add(highlightClass)
 }
 
 export {
@@ -583,4 +595,5 @@ export {
     clickMainHeaderFormCancel,
     clickMainHeaderFormSubmit,
     validityChecker,
+    clickOption,
 }

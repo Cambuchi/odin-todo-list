@@ -1,10 +1,17 @@
 import * as Logic from './logic'
 import * as DOM from './dom'
-import * as DataStorage from './scripts/datastorage'
+import * as DataStorage from './datastorage'
 
 //module to coordinate all of the DOM, Logic, and Data modules into the event listeners
 
 const createListeners = () => {
+    //retrieve the data 
+    let data = DataStorage.retrieveData('todolist')
+    //create the initial content with data for eventlisteners to apply to
+    DOM.populateGroups(data)
+    DOM.clickGroupText(Object.keys(data)[0])
+    DOM.populateTasks(data, Object.keys(data)[0])
+    
     document.body.addEventListener('click', function (event) {
         if (event.target !== event.currentTarget) {
             //when item in sidebar is clicked, makes active & populates gorup tasks
@@ -103,6 +110,9 @@ const createListeners = () => {
                 let task = event.target.parentNode.parentNode.parentNode
                 let currentGroup = document.getElementById('main-header-title').textContent
                 let taskArray = data[currentGroup]['tasks']
+                //reset the priority highlighting for the task list
+                task.classList = 'task'
+                task.classList.add(taskArray[task.id].priority)
                 DOM.clickTaskFormCancelBtn(task, taskArray)
             }
             //when submit button on tasks is clicked, add to data and update DOMException
@@ -155,7 +165,15 @@ const createListeners = () => {
                 sub.style.display = 'none'
                 form.style.display = 'flex'
             }
+            //when options are clicked, highlight the task in the color of the priority status
+            if (event.target.classList.contains('option')) {
+                DOM.clickOption(event)
+            }
         }
         event.stopPropagation();
     }, false)
+}
+
+export {
+    createListeners,
 }

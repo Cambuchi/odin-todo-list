@@ -497,3 +497,19 @@ body {
 .task-main-title:hover:after {
     content: '\00a0\00a0▼';
 }
+
+.option {
+    font-family: 'Aileron-Light';
+}
+
+.task-form-option-low {
+    color: #9ecaed;
+}
+
+.task-form-option-medium {
+    color: #ede29e;
+}
+
+.task-form-option-high {
+    color: #ed9eb4;
+}
