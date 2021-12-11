@@ -128,7 +128,7 @@ const clickCheckbox = (task) => {
     if (task.status == 'incomplete') {
         task.status = 'complete'
     } else {
-        task.status = 'complete'
+        task.status = 'incomplete'
     }
 }
 
