@@ -3,15 +3,18 @@ import * as DOM from './dom'
 import * as DataStorage from './datastorage'
 
 //module to coordinate all of the DOM, Logic, and Data modules into the event listeners
+//retrieve the data 
+let data = DataStorage.retrieveData('todolist')
 
-const createListeners = () => {
-    //retrieve the data 
-    let data = DataStorage.retrieveData('todolist')
-    //create the initial content with data for eventlisteners to apply to
+//create the initial content with data for eventlisteners to apply to
+const load = () => {
     DOM.populateGroups(data)
     DOM.clickGroupText(Object.keys(data)[0])
     DOM.populateTasks(data, Object.keys(data)[0])
-    
+}
+
+//create the event listener using event delegation
+const createListeners = () => {
     document.body.addEventListener('click', function (event) {
         if (event.target !== event.currentTarget) {
             //when item in sidebar is clicked, makes active & populates group tasks
@@ -182,10 +185,13 @@ const createListeners = () => {
 
 //when trash icon is clicked, display modal and change onclick functionality to match target element actions
 const clickTrashIcon = (data, element) => {
+    //display confirmation modal
     const modal = document.getElementById('modal-confirm')
     modal.style.display = 'flex'
+    //remove previous onclick functions
     const confirm = document.getElementById('modal-confirm-submit')
     confirm.onclick = null
+    //onclick logic for when group trash items are clicked
     if (element.classList.contains('group-item')) {
         confirm.onclick = function() {
             DOM.clickGroupTrash(element)
@@ -193,6 +199,7 @@ const clickTrashIcon = (data, element) => {
             DataStorage.setLocalStorage('todolist', data)
             modal.style.display = 'none'
         }
+    //onclick logic for when tasks are being trashed
     } else if (element.classList.contains('task')) {
         confirm.onclick = function() {
             let currentGroup = document.getElementById('main-header-title').textContent
@@ -207,4 +214,5 @@ const clickTrashIcon = (data, element) => {
 
 export {
     createListeners,
+    load,
 }
