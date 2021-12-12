@@ -29,12 +29,8 @@ const createListeners = () => {
             }
             //when group item trash can is clicked, delete the group from data & page
             if (event.target.classList.contains('group-trash')) {
-                if (!DOM.confirmation()) {
-                    return
-                }
-                DOM.clickGroupTrash(event)
-                Logic.deleteGroup(data, event.target.parentNode.textContent)
-                DataStorage.setLocalStorage('todolist', data)
+                let groupItem = event.target.parentNode
+                clickTrashIcon(data, groupItem);
             }
             //when the submit button in the modal is clicked, add new group to data & update DOM
             if (event.target.id === 'modal-submit') {
@@ -92,15 +88,8 @@ const createListeners = () => {
             }
             //when trash icon in task item is clicked, delete task from data & DOM
             if (event.target.classList.contains('task-main-trash')) {
-                if (!DOM.confirmation()) {
-                    return
-                }
                 let task = event.target.parentNode.parentNode
-                let currentGroup = document.getElementById('main-header-title').textContent
-                Logic.deleteTask(data[currentGroup], task.id)
-                Logic.renumberTasks(data[currentGroup]['tasks'])
-                DOM.populateTasks(data, currentGroup)
-                DataStorage.setLocalStorage('todolist', data)
+                clickTrashIcon(data, task)
             }
             //when edit icon on tasks is clicked, reveal & prepopulate the task edit form
             if (event.target.classList.contains('task-main-edit')) {
@@ -181,10 +170,40 @@ const createListeners = () => {
             if (event.target.classList.contains('option')) {
                 DOM.clickOption(event)
             }
+            //when modal confirmation cancel button is clicked, change modal display to
+            if (event.target.id == 'modal-confirm-cancel') {
+                const modal = document.getElementById('modal-confirm')
+                modal.style.display = 'none'
+            }
         }
         event.stopPropagation();
     }, false)
 }
+
+//when trash icon is clicked, display modal and change onclick functionality to match target element actions
+const clickTrashIcon = (data, element) => {
+    const modal = document.getElementById('modal-confirm')
+    modal.style.display = 'flex'
+    const confirm = document.getElementById('modal-confirm-submit')
+    confirm.onclick = null
+    if (element.classList.contains('group-item')) {
+        confirm.onclick = function() {
+            DOM.clickGroupTrash(element)
+            Logic.deleteGroup(data, element.textContent)
+            DataStorage.setLocalStorage('todolist', data)
+            modal.style.display = 'none'
+        }
+    } else if (element.classList.contains('task')) {
+        confirm.onclick = function() {
+            let currentGroup = document.getElementById('main-header-title').textContent
+            Logic.deleteTask(data[currentGroup], element.id)
+            Logic.renumberTasks(data[currentGroup]['tasks'])
+            DOM.populateTasks(data, currentGroup)
+            DataStorage.setLocalStorage('todolist', data)
+            modal.style.display = 'none'
+        }
+    }
+};
 
 export {
     createListeners,

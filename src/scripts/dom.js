@@ -70,14 +70,13 @@ const clickGroupText = (element) => {
 }
 
 //DOM actions when trash icon in group section is clicked
-const clickGroupTrash = (event) => {
+const clickGroupTrash = (element) => {
     //element should be the trash icon in the group section, event trigger
     //if group is the current active group, wipe main tasks area
-    let group = event.target.parentNode;
-    if (group.classList.contains('group-active')) {
+    if (element.classList.contains('group-active')) {
         blankProject();
     }
-    group.remove();
+    element.remove();
 }
 
 //populate tasks based on current project
@@ -573,15 +572,6 @@ const clickOption = (event) => {
     task.classList.add(highlightClass)
 };
 
-function confirmation() { 
-    let result = confirm("Are you sure about deleting that?");
-    if (result) {
-        return true;
-    }
-    return false;
-}
-    
-
 export {
     populateGroups,
     addGroup,
@@ -604,5 +594,4 @@ export {
     clickMainHeaderFormSubmit,
     validityChecker,
     clickOption,
-    confirmation,
 }

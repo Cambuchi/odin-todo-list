@@ -10,12 +10,15 @@ const initialize = () => {
     const footer = createFooter();
     //create the modal for adding groups
     const modal = createModal();
+    //create the confirmation modal
+    const confirm = createConfirmationModal()
 
 
     body.appendChild(header)
     body.appendChild(content)
     body.appendChild(footer)
     body.appendChild(modal)
+    body.appendChild(confirm)
 
 };
 
@@ -247,47 +250,30 @@ const createModal = () => {
 //create the modal content for the new group submit form
 const createConfirmationModal = () => {
     const modal = document.createElement('div');
-    modal.id = 'modal';
+    modal.id = 'modal-confirm';
 
     const modalContent = document.createElement('div')
-    modalContent.id = 'modal-content';
+    modalContent.id = 'modal-confirm-content';
 
-    const modalForm = document.createElement('form');
-    modalForm.id = 'modal-form';
+    const modalForm = document.createElement('div');
+    modalForm.id = 'modal-confirm-form';
     modalForm.onsubmit = 'return false';
 
-    const modalTitleHead = document.createElement('label');
-    modalTitleHead.className = 'modal-label'
-    modalTitleHead.for = 'modal-title'
-    modalTitleHead.textContent = "Project Name:";
-
-    const modalTitleInput = document.createElement('input');
-    modalTitleInput.type = 'text';
-    modalTitleInput.id = 'modal-title';
-    modalTitleInput.required = true;
-    modalTitleInput.placeholder = 'Name of Project/Tasks';
-
-    const modalDescHead = document.createElement('label');
-    modalDescHead.className = 'modal-label'
-    modalDescHead.for = 'modal-desc'
-    modalDescHead.textContent = "Project Description:";
-
-    const modalDescInput = document.createElement('input');
-    modalDescInput.type = 'text';
-    modalDescInput.id = 'modal-desc';
-    modalDescInput.placeholder = 'Description of Project/Tasks';
+    const modalTitleHead = document.createElement('div');
+    modalTitleHead.className = 'modal-confirm-label'
+    modalTitleHead.textContent = "Are you sure you want to delete this item?";
 
     const modalButtons = document.createElement('div');
-    modalButtons.id = 'modal-buttons-container';
+    modalButtons.id = 'modal-confirm-buttons-container';
 
     const modalSubmit = document.createElement('button');
-    modalSubmit.id = 'modal-submit';
+    modalSubmit.id = 'modal-confirm-submit';
     modalSubmit.className = 'btn-submit';
-    modalSubmit.textContent = 'Submit';
-    modalSubmit.type = 'submit';
+    modalSubmit.textContent = 'Confirm';
+    modalSubmit.type = 'button';
 
     const modalCancel = document.createElement('button');
-    modalCancel.id = 'modal-cancel';
+    modalCancel.id = 'modal-confirm-cancel';
     modalCancel.className = 'btn-cancel';
     modalCancel.textContent = 'Cancel';
     modalCancel.type = 'button';
@@ -296,9 +282,6 @@ const createConfirmationModal = () => {
     modalButtons.appendChild(modalCancel);
 
     modalForm.appendChild(modalTitleHead);
-    modalForm.appendChild(modalTitleInput);
-    modalForm.appendChild(modalDescHead);
-    modalForm.appendChild(modalDescInput);
     modalForm.appendChild(modalButtons);
 
     modalContent.appendChild(modalForm);
