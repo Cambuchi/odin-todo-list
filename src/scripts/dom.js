@@ -148,7 +148,6 @@ const createTaskMain = (taskData) => {
     //create delete button
     let trash = createTaskMainTrash();
 
-    
     taskMain.appendChild(checkbox);
     taskMain.appendChild(mainText);
     taskMain.appendChild(date);

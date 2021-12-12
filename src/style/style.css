@@ -317,8 +317,8 @@ body {
     align-self: stretch;
     background: #565e63;
     color: #eaebeb;
-    font-size: 1.15rem;
-    height: 4vh;
+    font-size: 1rem;
+    height: 3vh;
     position: sticky;
     top: 100vh;
     flex-shrink: 0;

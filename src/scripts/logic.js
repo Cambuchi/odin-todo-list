@@ -33,7 +33,6 @@ const editGroup = (data, newKey, oldKey, newDesc, oldDesc) => {
 
 //create a task item
 const createTask = (main, detail, priority, date, status, index) => {
-
     let formattedDate = ''
     if (date != '') {
         formattedDate = (new Date(date)).toLocaleDateString();
