@@ -1,148 +1,157 @@
-//module to handle all of the logic regarding the to do list data
+// module to handle all of the logic regarding the to do list data
 
-//add a group to the data
+// add a group to the data
 const addGroup = (data, title, description) => {
-    data[title] = {"description": description, "tasks": [] }
+  data[title] = { description, tasks: [] };
 };
 
-//delete group
+// delete group
 const deleteGroup = (data, group) => {
-    delete data[group];
-}
+  delete data[group];
+};
 
-//edit group title and name with provided new values
+// edit group title and name with provided new values
 const editGroup = (data, newKey, oldKey, newDesc, oldDesc) => {
-    //exit if provided values match
-    if (oldKey == newKey && newDesc == oldDesc) {
-        return true;
-    //if only the description is different, update value in data
-    } else if (oldKey == newKey && newDesc != oldDesc) {
-        data[oldKey]['description'] = newDesc;
-    //if key if different, change group key and description
-    } else if (oldKey !== newKey && data[oldKey] && !data[newKey]) {
-        Object.defineProperty(data, newKey,
-            Object.getOwnPropertyDescriptor(data, oldKey));
-        data[newKey]['description'] = newDesc
-        delete data[oldKey];
-    } else {
-        //if key is different but currently exists in data, do nothing & console log reason
-        console.log('New group already exists in data. Cannot have duplicate groups.')
-        return true
-    }
-}
+  // exit if provided values match
+  if (oldKey === newKey && newDesc === oldDesc) {
+    return true;
+    // if only the description is different, update value in data
+  } if (oldKey === newKey && newDesc !== oldDesc) {
+    data[oldKey].description = newDesc;
+    // if key if different, change group key and description
+  } else if (oldKey !== newKey && data[oldKey] && !data[newKey]) {
+    Object.defineProperty(
+      data,
+      newKey,
+      Object.getOwnPropertyDescriptor(data, oldKey),
+    );
+    data[newKey].description = newDesc;
+    delete data[oldKey];
+  } else {
+    // if key is different but currently exists in data, do nothing & console log reason
+    return true;
+  }
+  return false;
+};
 
-//create a task item
+// create a task item
 const createTask = (main, detail, priority, date, status, index) => {
-    let formattedDate = ''
-    if (date != '') {
-        formattedDate = (new Date(date)).toLocaleDateString();
-    }
+  let formattedDate = '';
+  if (date !== '') {
+    formattedDate = (new Date(date)).toLocaleDateString();
+  }
 
-    let task = {
-        "main": main,
-        "detail": detail,
-        "priority": priority,
-        "date": formattedDate,
-        "status": status,
-        "index": index,
-    }
-    return task
-}
+  const task = {
+    main,
+    detail,
+    priority,
+    date: formattedDate,
+    status,
+    index,
+  };
+  return task;
+};
 
-//adds task into specified group
+// adds task into specified group
 const addTask = (taskArray, task) => {
-    taskArray.push(task);
-}
+  taskArray.push(task);
+};
 
-//delete task with filter based on index of element clicked
+// delete task with filter based on index of element clicked
 const deleteTask = (group, index) => {
-    group['tasks'] = group['tasks'].filter(element => {return element.index != index});
-}
+  group.tasks = group.tasks.filter((element) => element.index !== parseInt(index, 10));
+};
 
-//edit task object by replacing task with new one via splice
+// edit task object by replacing task with new one via splice
 const editTask = (taskArray, newTask, index) => {
-    taskArray.splice(index, 1, newTask);
-}
+  taskArray.splice(index, 1, newTask);
+};
 
-//enumerates tasks to assign index number based on their order in the list
+// enumerates tasks to assign index number based on their order in the list
 const renumberTasks = (taskArray) => {
-    for (let i = 0; i < taskArray.length; i++) {
-        taskArray[i].index = i;
-    }
-}
+  for (let i = 0; i < taskArray.length; i += 1) {
+    taskArray[i].index = i;
+  }
+};
 
-//sorts the tasks array in a group by date ascending
+// sorts the tasks array in a group by date ascending
 const sortDateAscending = (taskArray) => {
-    taskArray.sort((a, b) => a.date - b.date)
-}
+  taskArray.sort((a, b) => a.date - b.date);
+};
 
-//sorts the tasks array in a group by date descending
+// sorts the tasks array in a group by date descending
 const sortDateDescending = (taskArray) => {
-    taskArray.sort((a, b) => b.date - a.date)
-}
+  taskArray.sort((a, b) => b.date - a.date);
+};
 
-//creates an array of tasks that match today's date
+// creates an array of tasks that match today's date
 const todayArray = (data) => {
-    let todaysTasks = []
+  const todaysTasks = [];
 
-    let today = new Date();
-    today = new Date(today.toLocaleDateString());
-    //go through data, filtering out any tasks that fit the date criteria
-    for (let [key, value] of Object.entries(data)) {
-        let results = value['tasks'].filter((e) => e.date == today)
-        todaysTasks.push(results)
-    }
-    //flatten the array since each group contributes an array of tasks
-    return todaysTasks.flat()
-}
+  let today = new Date();
+  today = new Date(today.toLocaleDateString());
+  // go through data, filtering out any tasks that fit the date criteria
+  const arrays = Object.values(data);
+  arrays.filter((v) => {
+    v.tasks.filter((x) => {
+      if (x.date === today) {
+        todaysTasks.push(x);
+      }
+      return false;
+    });
+    return false;
+  });
+  return todaysTasks;
+};
 
-//creates an array of tasks that fall between today & next 7 days
+// creates an array of tasks that fall between today & next 7 days
 const weeklyArray = (data) => {
-    let weeklyTasks = [];
-    //get beginning of today in unix epoch so that dates within today count
-    let today = new Date();
-    today = new Date(today.toLocaleDateString());
-    today = today.getTime();
-    //get unix epoch of seven days later
-    let sevenDaysLater = new Date();
-    sevenDaysLater = new Date(sevenDaysLater.toLocaleDateString());
-    sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
-    sevenDaysLater = sevenDaysLater.getTime();
-    //go through data, filtering out any tasks that fit the date criteria
-    for (let [key, value] of Object.entries(data)) {
-        let results = value['tasks'].filter((task) => {
-            let taskTime = new Date(task.date).getTime();
-            if (taskTime <= sevenDaysLater && taskTime >= today) {
-                return task
-            }
-        })
-        weeklyTasks.push(results)
-    }
-    //flatten the array since each group contributes an array of tasks
-    return weeklyTasks.flat()
-}
+  const weeklyTasks = [];
+  // get beginning of today in unix epoch so that dates within today count
+  let today = new Date();
+  today = new Date(today.toLocaleDateString());
+  today = today.getTime();
+  // get unix epoch of seven days later
+  let sevenDaysLater = new Date();
+  sevenDaysLater = new Date(sevenDaysLater.toLocaleDateString());
+  sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+  sevenDaysLater = sevenDaysLater.getTime();
+  // go through data, filtering out any tasks that fit the date criteria
+  const arrays = Object.values(data);
+  arrays.filter((v) => {
+    v.tasks.filter((x) => {
+      const time = new Date(x.date).getTime();
+      if (time >= today && time <= sevenDaysLater) {
+        weeklyTasks.push(x);
+      }
+      return false;
+    });
+    return false;
+  });
+  return weeklyTasks;
+};
 
-//change the data of task.status when checkbox is clicked
+// change the data of task.status when checkbox is clicked
 const clickCheckbox = (task) => {
-    if (task.status == 'incomplete') {
-        task.status = 'complete'
-    } else {
-        task.status = 'incomplete'
-    }
-}
+  if (task.status === 'incomplete') {
+    task.status = 'complete';
+  } else {
+    task.status = 'incomplete';
+  }
+};
 
 export {
-    addGroup,
-    deleteGroup,
-    editGroup,
-    createTask,
-    addTask,
-    deleteTask,
-    editTask,
-    renumberTasks,
-    sortDateAscending,
-    sortDateDescending,
-    todayArray,
-    weeklyArray,
-    clickCheckbox,
-}
+  addGroup,
+  deleteGroup,
+  editGroup,
+  createTask,
+  addTask,
+  deleteTask,
+  editTask,
+  renumberTasks,
+  sortDateAscending,
+  sortDateDescending,
+  todayArray,
+  weeklyArray,
+  clickCheckbox,
+};

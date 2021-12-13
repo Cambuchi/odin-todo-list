@@ -38,7 +38,10 @@ body {
     font-family: 'Basement-Grotesque';
     font-weight: 100;
     letter-spacing: 0.025em;
-    text-shadow: 0.025em 0.025em 0 #b5b5b5, 0.05em 0.05em 0 #868686, 0.075em 0.075em 0 #ff6767, 0.1em 0.1em 0 rgb(83, 83, 83);
+    text-shadow: 0.025em 0.025em 0 #b5b5b5, 
+    0.05em 0.05em 0 #868686, 
+    0.075em 0.075em 0 #ff6767, 
+    0.1em 0.1em 0 rgb(83, 83, 83);
 }
 
 #content {
