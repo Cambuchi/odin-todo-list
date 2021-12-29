@@ -3,7 +3,7 @@
 
 ### A web app for keeping track of your To-Dos for different projects. 
 
-<div align="center"><img src="odin-todo-list/odin-todo-list-README-cover.png" alt="image" width="900" /></div>
+<div align="center"><img src="oodin-todo-list/odin-todo-list-README-cover.png" alt="image" width="900" /></div>
 
 **Note:** This website works best with high res screens (1080p and up). Check the [improvements section](#improvements) for future updates.
 
@@ -24,6 +24,7 @@
 ## Live Demo
 
 [To-Do List:](https://cambuchi.github.io/odin-todo-list/)
+Deployed on [GitHub Pages](https://pages.github.com/)
 
 
 ## Getting Started
@@ -47,10 +48,6 @@ In order to setup and work on this project on your own, you will need to:
 ##### Once you are on the Home Page, you have two main panels
 - **Groups Panel**.- To switch between different Projects
 - **Tasks Panel**.- To check or uncheck To-Dos for the selected project
-
-## Deployed on GitHub Pages
-
-Deployed on [GitHub Pages](https://pages.github.com/)  
 
 ## Improvements
 
