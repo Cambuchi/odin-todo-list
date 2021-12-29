@@ -3,7 +3,7 @@
 
 ### A web app for keeping track of your To-Dos for different projects. 
 
-<div align="center"><img src="odin-todo-list/odin-todo-list-README-cover.png" alt="image" width="900" /></div>
+<div align="center"><img src="odin-todo-list-README-cover.png" alt="image" width="900" /></div>
 
 **Note:** This website works best with high res screens (1080p and up). Check the [improvements section](#improvements) for future updates.
 
